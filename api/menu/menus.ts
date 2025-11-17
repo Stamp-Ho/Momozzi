@@ -84,3 +84,29 @@ export async function fetchAllMenus(): Promise<Menu[]> {
   }
   return (data ?? []) as Menu[];
 }
+
+export async function updateMenu(
+  id: number,
+  patch: {
+    name?: string;
+    cuisine_style?: string | null;
+    main_ingredient?: string | null;
+    meal_type?: string | null;
+    price?: number | null;
+    bookmark?: boolean | null;
+  }
+): Promise<Menu> {
+  const { data, error } = await supabase
+    .from("menus")
+    .update(patch)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("updateMenu error:", error);
+    throw error;
+  }
+
+  return data as Menu;
+}

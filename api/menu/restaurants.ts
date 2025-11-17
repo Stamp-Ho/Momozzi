@@ -58,3 +58,29 @@ export async function createRestaurant(partial: {
   }
   return data as Restaurant;
 }
+
+export async function updateRestaurant(
+  id: number,
+  patch: {
+    name?: string;
+    address?: string;
+    openTime?: string | null;
+    closeTime?: string | null;
+    outerMapUrl?: string | null;
+    bookmark?: boolean | null;
+  }
+): Promise<Restaurant> {
+  const { data, error } = await supabase
+    .from("restaurants")
+    .update(patch)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("updateRestaurant error:", error);
+    throw error;
+  }
+
+  return data as Restaurant;
+}
