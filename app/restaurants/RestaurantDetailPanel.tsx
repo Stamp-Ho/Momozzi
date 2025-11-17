@@ -2,9 +2,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Restaurant, Menu } from "@/types/db";
-import { fetchMenusForRestaurant, createRelations } from "@/api/menu/relations";
-import { fetchAllMenus } from "@/api/menu/menus";
+import type { Restaurant, Menu, Restaurant_Menu_relation } from "@/types/db";
+import {
+  fetchRelationsByRestaurant,
+  createRelations,
+  deleteRelation,
+} from "@/api/menu/relations";
+import { fetchMenusByIds, fetchAllMenus } from "@/api/menu/menus";
 import { updateRestaurant } from "@/api/menu/restaurants";
 import { MenuCard } from "./MenuCard";
 
@@ -21,6 +25,14 @@ type RelationForm = {
   note: string;
 };
 
+type MenuWithRelation = {
+  menu: Menu;
+  relation: Pick<
+    Restaurant_Menu_relation,
+    "id" | "price" | "isInfinit" | "note"
+  >;
+};
+
 export function RestaurantDetailPanel({
   restaurant,
   onClose,
@@ -29,9 +41,9 @@ export function RestaurantDetailPanel({
   const [currentRestaurant, setCurrentRestaurant] =
     useState<Restaurant>(restaurant);
 
-  const [menus, setMenus] = useState<Menu[]>([]);
+  const [menuRelations, setMenuRelations] = useState<MenuWithRelation[]>([]);
   const [allMenus, setAllMenus] = useState<Menu[]>([]);
-  const [loadingMenus, setLoadingMenus] = useState(false);
+  const [loadingRelations, setLoadingRelations] = useState(false);
   const [loadingAllMenus, setLoadingAllMenus] = useState(false);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -54,17 +66,42 @@ export function RestaurantDetailPanel({
   });
   const [savingRelation, setSavingRelation] = useState(false);
 
-  useEffect(() => {
-    const loadMenus = async () => {
-      setLoadingMenus(true);
-      try {
-        const data = await fetchMenusForRestaurant(restaurant.id);
-        setMenus(data);
-      } finally {
-        setLoadingMenus(false);
+  // ✅ 이 식당의 relation + menu 조합 가져오기
+  const load = async () => {
+    setLoadingRelations(true);
+    try {
+      const relations = await fetchRelationsByRestaurant(restaurant.id);
+      if (relations.length === 0) {
+        setMenuRelations([]);
+        return;
       }
-    };
-    void loadMenus();
+
+      const menuIds = Array.from(new Set(relations.map((r) => r.menu_id)));
+      const menus = await fetchMenusByIds(menuIds);
+
+      const merged: MenuWithRelation[] = relations
+        .map((rel) => {
+          const menu = menus.find((m) => m.id === rel.menu_id);
+          if (!menu) return null;
+          return {
+            menu,
+            relation: {
+              id: rel.id,
+              price: rel.price,
+              isInfinit: rel.isInfinit,
+              note: rel.note,
+            },
+          };
+        })
+        .filter((x): x is MenuWithRelation => x !== null);
+
+      setMenuRelations(merged);
+    } finally {
+      setLoadingRelations(false);
+    }
+  };
+  useEffect(() => {
+    void load();
   }, [restaurant.id]);
 
   useEffect(() => {
@@ -112,7 +149,6 @@ export function RestaurantDetailPanel({
     try {
       await createRelations([
         {
-          name: "",
           restaurant_id: currentRestaurant.id,
           menu_id: relationForm.menuId,
           price: relationForm.price ? Number(relationForm.price) : null,
@@ -121,8 +157,7 @@ export function RestaurantDetailPanel({
         },
       ]);
 
-      const data = await fetchMenusForRestaurant(currentRestaurant.id);
-      setMenus(data);
+      load(); // 새로고침
 
       setRelationForm({
         menuId: null,
@@ -181,8 +216,8 @@ export function RestaurantDetailPanel({
               <div>이름: {currentRestaurant.name}</div>
               <div>주소: {currentRestaurant.address}</div>
               <div>
-                시간: {currentRestaurant.openTime ?? "??"} ~{" "}
-                {currentRestaurant.closeTime ?? "??"}
+                시간: {currentRestaurant.openTime?.slice(0, 5) ?? "??"} ~{" "}
+                {currentRestaurant.closeTime?.slice(0, 5) ?? "??"}
               </div>
               <div>북마크: {currentRestaurant.bookmark ? "⭐" : "없음"}</div>
               <div className="text-[10px] text-gray-400">
@@ -192,7 +227,7 @@ export function RestaurantDetailPanel({
             </div>
           </div>
 
-          {/* 수정 모드: 식당 정보 수정 */}
+          {/* 수정 모드: 식당 정보 수정 (기존 코드 유지) */}
           {isEditing && (
             <div className="space-y-2 border rounded p-3">
               <div className="text-xs text-gray-500 mb-1">식당 정보 수정</div>
@@ -279,20 +314,57 @@ export function RestaurantDetailPanel({
             </div>
           )}
 
-          {/* 이 식당에서 먹을 수 있는 메뉴들 */}
+          {/* ✅ 이 식당에서 먹을 수 있는 메뉴 (관계 기반 price / 무한리필 표시) */}
           <div className="space-y-2">
             <div className="text-xs text-gray-500">
               이 식당에서 먹을 수 있는 메뉴
             </div>
-            {loadingMenus && <div className="text-xs">불러오는 중...</div>}
-            {!loadingMenus && menus.length === 0 && (
+            {loadingRelations && <div className="text-xs">불러오는 중...</div>}
+            {!loadingRelations && menuRelations.length === 0 && (
               <div className="text-xs text-gray-500">
                 아직 이 식당과 연결된 메뉴가 없어요.
               </div>
             )}
             <div className="space-y-2">
-              {menus.map((m) => (
-                <MenuCard key={m.id} menu={m} onSelect={onSelectMenu} />
+              {menuRelations.map(({ menu, relation }) => (
+                <div
+                  key={relation.id}
+                  className="border rounded p-3 cursor-pointer hover:bg-gray-50"
+                  onClick={() =>
+                    onSelectMenu && !isEditing && onSelectMenu(menu)
+                  }
+                >
+                  <div className="flex justify-between items-center gap-3">
+                    <div className="space-y-1 flex flex-row flex-1 ">
+                      <div>
+                        <div className="font-semibold text-sm">
+                          {menu.name}
+                          {relation.isInfinit ? " · 무한리필" : ""}
+                        </div>
+                        {relation.note && (
+                          <div className="text-[11px] text-gray-500">
+                            메모: {relation.note}
+                          </div>
+                        )}
+                      </div>
+                      <div className="text-[15px] text-gray-700 ml-auto">
+                        {relation.price != null
+                          ? `${relation.price.toLocaleString()}원`
+                          : "기록 없음"}
+                      </div>
+                      {isEditing && (
+                        <button
+                          className="text-xs text-red-500 ml-2"
+                          onClick={async () =>
+                            await deleteRelation(relation.id).then(() => load())
+                          }
+                        >
+                          삭제
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>

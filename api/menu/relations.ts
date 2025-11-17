@@ -5,7 +5,6 @@ import type { Restaurant_Menu_relation, Restaurant, Menu } from "@/types/db";
 
 export async function createRelations(
   relations: Array<{
-    name: string;
     restaurant_id: number;
     menu_id: number;
     price: number | null;
@@ -21,6 +20,19 @@ export async function createRelations(
 
   if (error) {
     console.error("createRelations error:", error);
+    throw error;
+  }
+}
+
+export async function deleteRelation(id: number) {
+  if (!id) return;
+  const { error } = await supabase
+    .from("restaurant_menu")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error("deleteRelation error:", error);
     throw error;
   }
 }

@@ -36,15 +36,18 @@ export function RestaurantCard({
     >
       <div className="space-y-1">
         <div className="font-semibold">{restaurant.name}</div>
-        <div className="text-xs text-gray-500">{restaurant.address}</div>
+        <div className="text-xs text-gray-500">
+          {restaurant.address.split(" ")[1]}
+        </div>
         {(restaurant.openTime || restaurant.closeTime) && (
           <div className="text-xs text-gray-400">
-            {restaurant.openTime ?? ""} ~ {restaurant.closeTime ?? ""}
+            {restaurant.openTime?.slice(0, 5) ?? ""} ~{" "}
+            {restaurant.closeTime?.slice(0, 5) ?? ""}
           </div>
         )}
       </div>
       <div className="flex flex-col items-end gap-2 shrink-0">
-        {restaurant.outerMapUrl && (
+        {restaurant.outerMapUrl && onToggleBookmark && (
           <button
             onClick={handleOpenMap}
             className="text-xs px-2 py-1 border rounded"

@@ -110,3 +110,16 @@ export async function updateMenu(
 
   return data as Menu;
 }
+// ✅ id 배열로 메뉴 여러 개 가져오기
+export async function fetchMenusByIds(ids: number[]): Promise<Menu[]> {
+  if (ids.length === 0) return [];
+
+  const { data, error } = await supabase.from("menu").select("*").in("id", ids);
+
+  if (error) {
+    console.error("fetchMenusByIds error:", error);
+    throw error;
+  }
+
+  return (data ?? []) as Menu[];
+}
