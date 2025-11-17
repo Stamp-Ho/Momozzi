@@ -103,7 +103,6 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
     try {
       await createRelations([
         {
-          name: "",
           restaurant_id: relationForm.restaurantId,
           menu_id: currentMenu.id,
           price: relationForm.price ? Number(relationForm.price) : null,
