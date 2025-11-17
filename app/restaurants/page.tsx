@@ -1,7 +1,8 @@
 // app/restaurants/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import type { MenuFilter, Menu, Restaurant } from "@/types/db";
 import { MenuRecommendTab } from "./MenuRecommendTab";
 import { BookmarkTab } from "./BookmarkTab";
@@ -19,6 +20,7 @@ const defaultFilter: MenuFilter = {
 };
 
 export default function RestaurantsPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabKey>("recommend");
   const [filter, setFilter] = useState<MenuFilter>(defaultFilter);
 
@@ -60,6 +62,21 @@ export default function RestaurantsPage() {
     setTouchStartX(null);
   };
 
+  const [authed, setAuthed] = useState<null | boolean>(null);
+
+  useEffect(() => {
+    const isAuthed = localStorage.getItem("couple-app-auth") === "1";
+
+    if (!isAuthed) {
+      router.replace("/login");
+    } else {
+      setAuthed(true);
+    }
+  }, [router]);
+
+  if (authed === null) {
+    return null; // 체크 중엔 아무것도 안 보여줌
+  }
   return (
     <>
       <main className="p-4 max-w-3xl mx-auto space-y-4">
