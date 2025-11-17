@@ -32,7 +32,7 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-slate-100">
       <div className="bg-white rounded-xl shadow-md p-6 w-full max-w-xs space-y-4">
-        <h1 className="text-xl font-bold text-center">둘만의 공간 입장하기</h1>
+        <h1 className="text-xl font-bold text-center">이건 우리만 쓸거야</h1>
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
