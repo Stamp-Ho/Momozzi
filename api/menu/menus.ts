@@ -97,7 +97,7 @@ export async function updateMenu(
   }
 ): Promise<Menu> {
   const { data, error } = await supabase
-    .from("menus")
+    .from("menu")
     .update(patch)
     .eq("id", id)
     .select()

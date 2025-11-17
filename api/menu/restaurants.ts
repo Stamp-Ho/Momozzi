@@ -71,7 +71,7 @@ export async function updateRestaurant(
   }
 ): Promise<Restaurant> {
   const { data, error } = await supabase
-    .from("restaurants")
+    .from("restaurant")
     .update(patch)
     .eq("id", id)
     .select()
