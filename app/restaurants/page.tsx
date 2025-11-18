@@ -82,7 +82,9 @@ export default function RestaurantsPage() {
   return (
     <>
       <main className="p-4 max-w-3xl mx-auto space-y-4 bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] min-h-screen">
-        <h1 className="text-xl font-bold mb-1">우리 둘만의 맛집/메뉴 관리</h1>
+        <h1 className="text-xl text-black font-bold mb-1">
+          우리 둘만의 맛집/메뉴 관리
+        </h1>
 
         {/* 탭 내용 */}
         <div className="h-[90vh]">

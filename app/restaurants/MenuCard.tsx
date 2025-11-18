@@ -26,7 +26,7 @@ export function MenuCard({ menu, onToggleBookmark, onSelect }: Props) {
       onClick={handleClick}
     >
       <div className="space-y-1">
-        <div className="font-semibold">{menu.name}</div>
+        <div className="font-semibold text-black">{menu.name}</div>
         <div className="text-xs text-gray-700">
           {[
             `${menu.price != null ? menu.price.toLocaleString() : 0}원`,

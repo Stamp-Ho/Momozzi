@@ -100,9 +100,11 @@ export function MenuRecommendTab({
       <div className="rounded-xl p-3 space-y-3 bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
         <div className="flex gap-2">
           <div className="flex-1">
-            <label className="block text-xs mb-1 font-bold">음식 종류</label>
+            <label className="block text-xs text-black mb-1 font-bold">
+              음식 종류
+            </label>
             <select
-              className="rounded px-2 font-bold py-2 w-full text-sm border border-gray-400"
+              className="rounded px-2 font-bold py-2 w-full text-sm text-black border border-gray-400"
               value={filter.cuisine_style ?? ""}
               onChange={(e) =>
                 handleFilterChange({
@@ -122,9 +124,11 @@ export function MenuRecommendTab({
           </div>
 
           <div className="flex-1">
-            <label className="block text-xs mb-1 font-bold">식사 타입</label>
+            <label className="block text-xs text-black mb-1 font-bold">
+              식사 타입
+            </label>
             <select
-              className="rounded px-2 font-bold py-2 w-full text-sm border border-gray-400"
+              className="rounded px-2 font-bold py-2 w-full text-sm text-black border border-gray-400"
               value={filter.meal_type ?? ""}
               onChange={(e) =>
                 handleFilterChange({
@@ -143,7 +147,9 @@ export function MenuRecommendTab({
         </div>
         <div className="flex gap-2 items-end">
           <div className="flex-1">
-            <label className="block text-xs mb-2 font-bold">가격 범위</label>
+            <label className="block text-xs mb-2 font-bold text-black">
+              가격 범위
+            </label>
 
             <div className="px-1">
               {/* 슬라이더 트랙 */}
@@ -236,7 +242,9 @@ export function MenuRecommendTab({
       {/* 추천 하나 */}
       {selected && (
         <div>
-          <h2 className="text-sm font-semibold mb-2">오늘의 추천 메뉴 ★</h2>
+          <h2 className="text-sm font-semibold mb-2 text-black">
+            오늘의 추천 메뉴 ★
+          </h2>
           <MenuCard
             menu={selected}
             onToggleBookmark={handleToggleBookmark}
