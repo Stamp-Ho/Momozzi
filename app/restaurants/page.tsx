@@ -10,6 +10,8 @@ import { ManageTab } from "./ManageTab";
 import { MenuDetailPanel } from "./MenuDetailPanel";
 import { RestaurantDetailPanel } from "./RestaurantDetailPanel";
 
+import { Utensils, Star, Settings } from "lucide-react";
+
 type TabKey = "recommend" | "bookmark" | "manage";
 
 const defaultFilter: MenuFilter = {
@@ -79,32 +81,11 @@ export default function RestaurantsPage() {
   }
   return (
     <>
-      <main className="p-4 max-w-3xl mx-auto space-y-4">
+      <main className="p-4 max-w-3xl mx-auto space-y-4 bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] min-h-screen">
         <h1 className="text-xl font-bold mb-1">우리 둘만의 맛집/메뉴 관리</h1>
 
-        {/* 탭 바 */}
-        <div className="flex gap-2 border-b pb-2">
-          {[
-            { key: "recommend", label: "메뉴 추천" },
-            { key: "bookmark", label: "북마크 모아보기" },
-            { key: "manage", label: "관리" },
-          ].map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key as TabKey)}
-              className={`px-3 py-1 rounded-t-md text-sm ${
-                activeTab === tab.key
-                  ? "bg-black text-white"
-                  : "bg-gray-100 text-gray-700"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
         {/* 탭 내용 */}
-        <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+        <div className="h-[90vh]">
           {activeTab === "recommend" && (
             <MenuRecommendTab
               filter={filter}
@@ -144,6 +125,27 @@ export default function RestaurantsPage() {
           onSelectMenu={handleSelectMenu}
         />
       )}
+      {/* 탭 바 */}
+      <div className="fixed bottom-2 left-0 w-full flex gap-2 bg-white shadow-[0_-1px_6px_rgba(0,0,0,0.1)] px-6 pt-2">
+        {[
+          { key: "recommend", label: "메뉴 추천", icon: Utensils },
+          { key: "bookmark", label: "북마크", icon: Star },
+          { key: "manage", label: "관리", icon: Settings },
+        ].map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setActiveTab(tab.key as TabKey)}
+            className={`px-3 py-1 text-sm flex-1 flex flex-col items-center justify-center font-bold`}
+            style={{ color: activeTab === tab.key ? "#00e0e0" : "#b4b4b4ff" }}
+          >
+            <tab.icon
+              color={`${activeTab === tab.key ? "#00e0e0" : "#b4b4b4ff"}`}
+              size={30}
+            />
+            {tab.label}
+          </button>
+        ))}
+      </div>
     </>
   );
 }

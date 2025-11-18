@@ -7,6 +7,9 @@ import { CUISINE_STYLES, MEAL_TYPES } from "@/types/enums";
 import { fetchMenusByFilter, updateMenuBookmark } from "@/api/menu/menus";
 import { MenuCard } from "./MenuCard";
 
+const PRICE_MIN = 6000;
+const PRICE_MAX = 40000; // 메뉴 가격 상한 (원하는 값으로 조정 가능)
+const PRICE_STEP = 2000; // 500
 type Props = {
   filter: MenuFilter;
   onChangeFilter: (next: MenuFilter) => void;
@@ -72,18 +75,34 @@ export function MenuRecommendTab({
       }
     }
   };
+  // 🔽 가격 슬라이더용 핸들러 추가
+  const handlePriceMinChange = (value: number) => {
+    const currentMax = filter.priceMax ?? PRICE_MAX;
+    const nextMin = Math.min(value, currentMax - 5000);
+    handleFilterChange({
+      priceMin: nextMin,
+    });
+  };
 
+  const handlePriceMaxChange = (value: number) => {
+    const currentMin = filter.priceMin ?? PRICE_MIN;
+    const nextMax = Math.max(value, currentMin + 5000);
+    handleFilterChange({
+      priceMax: nextMax,
+    });
+  };
+
+  const effectiveMin = filter.priceMin ?? PRICE_MIN;
+  const effectiveMax = filter.priceMax ?? PRICE_MAX;
   return (
     <section className="space-y-4">
       {/* 필터 영역 */}
-      <div className="border rounded p-3 space-y-3">
+      <div className="rounded-xl p-3 space-y-3 bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
         <div className="flex gap-2">
           <div className="flex-1">
-            <label className="block text-xs mb-1">
-              음식 종류 (cuisine_style)
-            </label>
+            <label className="block text-xs mb-1 font-bold">음식 종류</label>
             <select
-              className="border rounded px-2 py-1 w-full text-sm"
+              className="rounded px-2 font-bold py-2 w-full text-sm border border-gray-400"
               value={filter.cuisine_style ?? ""}
               onChange={(e) =>
                 handleFilterChange({
@@ -91,9 +110,11 @@ export function MenuRecommendTab({
                 })
               }
             >
-              <option value="">전체</option>
+              <option className="font-bold bg-white" value="">
+                전체
+              </option>
               {CUISINE_STYLES.map((s) => (
-                <option key={s} value={s}>
+                <option className="font-bold bg-white" key={s} value={s}>
                   {s}
                 </option>
               ))}
@@ -101,9 +122,9 @@ export function MenuRecommendTab({
           </div>
 
           <div className="flex-1">
-            <label className="block text-xs mb-1">식사 타입 (meal_type)</label>
+            <label className="block text-xs mb-1 font-bold">식사 타입</label>
             <select
-              className="border rounded px-2 py-1 w-full text-sm"
+              className="rounded px-2 font-bold py-2 w-full text-sm border border-gray-400"
               value={filter.meal_type ?? ""}
               onChange={(e) =>
                 handleFilterChange({
@@ -120,37 +141,92 @@ export function MenuRecommendTab({
             </select>
           </div>
         </div>
-
         <div className="flex gap-2 items-end">
           <div className="flex-1">
-            <label className="block text-xs mb-1">최소 가격</label>
-            <input
-              type="number"
-              className="border rounded px-2 py-1 w-full text-sm"
-              value={filter.priceMin ?? ""}
-              onChange={(e) =>
-                handleFilterChange({
-                  priceMin: e.target.value ? Number(e.target.value) : null,
-                })
-              }
-            />
+            <label className="block text-xs mb-2 font-bold">가격 범위</label>
+
+            <div className="px-1">
+              {/* 슬라이더 트랙 */}
+              <div className="relative h-1 bg-gray-200 rounded">
+                {/* 선택된 범위를 보여주는 하이라이트 바 */}
+                <div
+                  className="absolute h-1 bg-black rounded"
+                  style={{
+                    left: `${
+                      ((effectiveMin - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) *
+                      100
+                    }%`,
+                    right: `${
+                      100 -
+                      ((effectiveMax - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) *
+                        100
+                    }%`,
+                  }}
+                />
+
+                {/* 최소값 핸들 */}
+                <input
+                  type="range"
+                  min={PRICE_MIN}
+                  max={PRICE_MAX}
+                  step={PRICE_STEP}
+                  value={effectiveMin}
+                  onChange={(e) => handlePriceMinChange(Number(e.target.value))}
+                  className="
+                    absolute -top-1.5 w-full appearance-none pointer-events-none
+                    touch-none
+                    [&::-webkit-slider-thumb]:pointer-events-auto
+                    [&::-webkit-slider-thumb]:appearance-none
+                    [&::-webkit-slider-thumb]:h-4
+                    [&::-webkit-slider-thumb]:w-4
+                    [&::-webkit-slider-thumb]:rounded-full
+                    [&::-webkit-slider-thumb]:bg-black
+                    [&::-moz-range-thumb]:pointer-events-auto
+                    [&::-moz-range-thumb]:appearance-none
+                    [&::-moz-range-thumb]:h-4
+                    [&::-moz-range-thumb]:w-4
+                    [&::-moz-range-thumb]:rounded-full
+                    [&::-moz-range-thumb]:bg-red
+                  "
+                />
+
+                {/* 최대값 핸들 */}
+                <input
+                  type="range"
+                  min={PRICE_MIN}
+                  max={PRICE_MAX}
+                  step={PRICE_STEP}
+                  value={effectiveMax}
+                  onChange={(e) => handlePriceMaxChange(Number(e.target.value))}
+                  onClick={(e) => e.stopPropagation()}
+                  className="
+                    absolute -top-1.5 w-full appearance-none pointer-events-none
+                    touch-none
+                    [&::-webkit-slider-thumb]:pointer-events-auto
+                    [&::-webkit-slider-thumb]:appearance-none
+                    [&::-webkit-slider-thumb]:h-4
+                    [&::-webkit-slider-thumb]:w-4
+                    [&::-webkit-slider-thumb]:rounded-full
+                    [&::-webkit-slider-thumb]:bg-black
+                    [&::-moz-range-thumb]:h-4
+                    [&::-moz-range-thumb]:w-4
+                    [&::-moz-range-thumb]:rounded-full
+                    [&::-moz-range-thumb]:bg-black
+                  "
+                />
+              </div>
+
+              {/* 선택 범위 숫자 표시 */}
+              <div className="flex justify-between text-xs text-gray-500 mt-2">
+                <span>{effectiveMin.toLocaleString()}원</span>
+                <span>{effectiveMax.toLocaleString()}원</span>
+              </div>
+            </div>
           </div>
-          <div className="flex-1">
-            <label className="block text-xs mb-1">최대 가격</label>
-            <input
-              type="number"
-              className="border rounded px-2 py-1 w-full text-sm"
-              value={filter.priceMax ?? ""}
-              onChange={(e) =>
-                handleFilterChange({
-                  priceMax: e.target.value ? Number(e.target.value) : null,
-                })
-              }
-            />
-          </div>
+
           <button
             onClick={handleRecommend}
-            className="px-3 py-2 text-sm rounded bg-black text-white"
+            className="w-30 px-3 py-2.5 text-md rounded bg-[#00efef] text-white whitespace-nowrap font-bold"
           >
             {loading ? "추천 중..." : "추천 받기"}
           </button>
@@ -160,7 +236,7 @@ export function MenuRecommendTab({
       {/* 추천 하나 */}
       {selected && (
         <div>
-          <h2 className="text-sm font-semibold mb-2">오늘의 추천 메뉴</h2>
+          <h2 className="text-sm font-semibold mb-2">오늘의 추천 메뉴 ★</h2>
           <MenuCard
             menu={selected}
             onToggleBookmark={handleToggleBookmark}
@@ -175,7 +251,7 @@ export function MenuRecommendTab({
           <h3 className="text-xs text-gray-500">
             필터에 해당하는 메뉴 목록 ({menus.length}개)
           </h3>
-          <div className="space-y-2 max-h-80 overflow-auto">
+          <div className="space-y-2 max-h-98 overflow-auto pb-4">
             {menus.map((m) => (
               <MenuCard
                 key={m.id}
@@ -189,8 +265,8 @@ export function MenuRecommendTab({
       )}
 
       {!loading && menus.length === 0 && (
-        <p className="text-xs text-gray-500">
-          아직 필터로 찾은 메뉴가 없어요. 메뉴를 추가하거나 필터를 조정해보세요.
+        <p className="text-xs text-gray-500 text-center">
+          아직 추천 메뉴가 없어요. 메뉴를 추가하거나 필터를 조정해보세요.
         </p>
       )}
     </section>

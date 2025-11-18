@@ -21,21 +21,22 @@ export function MenuCard({ menu, onToggleBookmark, onSelect }: Props) {
 
   return (
     <div
-      className="border rounded p-3 flex justify-between items-center gap-3 cursor-pointer hover:bg-gray-50"
+      className="rounded-xl px-4 py-3 flex justify-between items-center gap-3 cursor-pointer hover:bg-gray-50
+                  bg-white shadow-sm shadow-[#00cccc33] border-[#00eeee44] border border-1.5"
       onClick={handleClick}
     >
       <div className="space-y-1">
         <div className="font-semibold">{menu.name}</div>
-        <div className="text-xs text-gray-500">
-          {[menu.cuisine_style, menu.meal_type, menu.main_ingredient]
+        <div className="text-xs text-gray-700">
+          {[
+            `${menu.price != null ? menu.price.toLocaleString() : 0}원`,
+            menu.cuisine_style,
+            menu.meal_type,
+            menu.main_ingredient,
+          ]
             .filter(Boolean)
             .join(" · ")}
         </div>
-        {menu.price != null && (
-          <div className="text-xs text-gray-700">
-            {menu.price.toLocaleString()}원
-          </div>
-        )}
       </div>
       {onToggleBookmark && (
         <button onClick={handleToggle} className="text-xl shrink-0">

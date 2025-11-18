@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import whatToEat from "../public/뭐먹지.png";
 
 export default function HomePage() {
   const router = useRouter();
@@ -30,20 +32,45 @@ export default function HomePage() {
   return (
     <main className="p-6">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">메인 페이지</h1>
+        <h1 className="text-xl font-bold">별이노 4차원 주머니</h1>
         <button
           onClick={handleLogout}
-          className="px-3 py-1 rounded bg-red-500 text-white"
+          className="px-3 py-1 rounded-md bg-red-400 text-white"
         >
           로그아웃
         </button>
       </div>
 
-      <p>여긴 로그인된 사람만 볼 수 있어요.</p>
-
-      <a href="/restaurants" className="text-blue-500 underline">
-        음식점 목록 보러 가기
-      </a>
+      <div className="grid grid-cols-2 p-4 gap-8">
+        <a
+          href="/restaurants"
+          className="text-black border p-2 pb-0 inline-block border-gray-300 rounded-xl text-center font-bold "
+        >
+          <Image
+            className="mb-1"
+            src={whatToEat} // 임포트된 이미지 객체 사용
+            alt="나의 로컬 이미지"
+            width={120} // 필수: 원본 이미지의 너비
+            height={120} // 필수: 원본 이미지의 높이
+            priority // (선택 사항) 페이지 로드 시 먼저 로드되도록 설정
+          />
+          메뉴 추천
+        </a>
+        <a
+          href="/restaurants"
+          className="text-black border p-2 pb-0 inline-block border-gray-300 rounded-xl text-center font-bold "
+        >
+          <Image
+            className="mb-1"
+            src={whatToEat} // 임포트된 이미지 객체 사용
+            alt="나의 로컬 이미지"
+            width={120} // 필수: 원본 이미지의 너비
+            height={120} // 필수: 원본 이미지의 높이
+            priority // (선택 사항) 페이지 로드 시 먼저 로드되도록 설정
+          />
+          메뉴 추천
+        </a>
+      </div>
     </main>
   );
 }
