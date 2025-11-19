@@ -31,7 +31,7 @@ export function BookmarkTab({
   onSelectMenu,
   onSelectRestaurant,
 }: Props) {
-  const [viewMode, setViewMode] = useState<ViewMode>("menu");
+  const [viewMode, setViewMode] = useState<ViewMode>("restaurant");
   const [menus, setMenus] = useState<Menu[]>([]);
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loadingMenus, setLoadingMenus] = useState(false);
