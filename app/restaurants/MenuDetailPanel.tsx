@@ -4,11 +4,8 @@
 import { useEffect, useState } from "react";
 import type { Menu, Restaurant } from "@/types/db";
 import { fetchRestaurantsForMenu, createRelations } from "@/api/menu/relations";
-import {
-  fetchAllRestaurants,
-  updateRestaurantBookmark,
-} from "@/api/menu/restaurants";
-import { updateMenu } from "@/api/menu/menus";
+import { fetchAllRestaurants, updateRestaurantBookmark } from "@/api/menu/restaurants";
+import { updateMenu, updateMenuBookmark } from "@/api/menu/menus";
 import { CUISINE_STYLES, MAIN_INGREDIENTS, MEAL_TYPES } from "@/types/enums";
 import { RestaurantCard } from "./RestaurantCard";
 import { Bookmark, BookmarkCheck } from "lucide-react";
@@ -16,7 +13,6 @@ import { Bookmark, BookmarkCheck } from "lucide-react";
 type Props = {
   menu: Menu;
   onClose: () => void;
-  onToggleBookmark? : (id: number) => void;
   onSelectRestaurant?: (restaurant: Restaurant) => void;
 };
 
@@ -27,7 +23,7 @@ type RelationForm = {
   note: string;
 };
 
-export function MenuDetailPanel({ menu, onClose, onToggleBookmark, onSelectRestaurant }: Props) {
+export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [allRestaurants, setAllRestaurants] = useState<Restaurant[]>([]);
   const [loadingRelations, setLoadingRelations] = useState(false);
@@ -136,7 +132,7 @@ export function MenuDetailPanel({ menu, onClose, onToggleBookmark, onSelectResta
       setSavingRelation(false);
     }
   };
-    const handleToggleRestaurantBookmark = async (id: number) => {
+  const handleToggleRestaurantBookmark = async (id: number) => {
     setRestaurants((prev) =>
       prev.map((r) =>
         r.id === id ? { ...r, bookmark: !(r.bookmark ?? false) } : r
@@ -153,7 +149,15 @@ export function MenuDetailPanel({ menu, onClose, onToggleBookmark, onSelectResta
       );
     }
   };
-
+  const handleToggleMenuBookmark = async () => {
+    const current = menuForm.bookMark ?? false;
+    setMenuForm((prev) => {...prev , bookmark: !current});
+    try {
+      await updateMenuBookmark(menuForm.id, !current);
+    } catch {
+      setMenuForm((prev) => {...prev, bookmark: current});
+    }
+  }
   return (
     <div className="fixed inset-0 bg-black/30 flex justify-end z-50">
       <div className="w-full max-w-md h-full bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] shadow-xl flex flex-col">
@@ -170,14 +174,15 @@ export function MenuDetailPanel({ menu, onClose, onToggleBookmark, onSelectResta
             >
               {isEditing ? "수정 닫기" : "수정하기"}
             </button>
-            {onToggleBookmark && (
-                    <button onClick={handleToggle} className="text-xl shrink-0">
-          {menu.bookmark ? (
-            <BookmarkCheck strokeWidth={2.5} color="#ff853eff" />
-          ) : (
-            <Bookmark strokeWidth={2} strokeOpacity={0.25} />
-          )}
-        </button>)}
+            
+            <button onClick={handleToggleMenuBookmark} className="text-xl shrink-0">
+              {menu.bookmark ? (
+                <BookmarkCheck strokeWidth={2.5} color="#ff853eff" />
+                ) : (
+                <Bookmark strokeWidth={2} strokeOpacity={0.25} />
+                )
+              }
+            </button>
           </div>
         </div>
 
