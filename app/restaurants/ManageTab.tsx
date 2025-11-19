@@ -284,7 +284,7 @@ export function ManageTab({
             />
             <button
               onClick={handleCreateRestaurant}
-              className="self-end w-30 px-3 py-2.5 text-md rounded bg-[#00efef] text-white whitespace-nowrap font-bold flex-2"
+              className="self-end w-30 px-3 py-1.5 text-md rounded bg-[#00efef] text-white whitespace-nowrap font-bold flex-2"
             >
               식당 추가
             </button>
@@ -296,7 +296,7 @@ export function ManageTab({
       {/* 메뉴 추가 */}
       {addingIndex === 2 && (
         <div className="rounded-xl p-3 space-y-3 bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
-          <h2 className="text-sm font-bold text-black">메뉴 추가</h2>
+          <h2 className="text-sm font-semibold text-black">메뉴 추가</h2>
           <div className="flex flex-col gap-2 text-sm">
             <input
               className="rounded px-2 font-bold py-1.5 w-full text-sm text-black border border-gray-300"
@@ -381,12 +381,12 @@ export function ManageTab({
       {addingIndex === 3 && (
         <div className="rounded-xl p-3 space-y-3 bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
           <h2 className="text-sm font-semibold">
-            식당에 메뉴 관계 추가 (여러 개 한 번에)
+            식당에 메뉴 추가
           </h2>
 
           <div className="flex flex-col gap-2 text-sm">
             <select
-              className="border rounded px-2 py-1"
+              className="rounded px-2 font-bold py-1.5 w-full text-sm text-black border border-gray-300"
               value={selectedRestaurantId ?? ""}
               onChange={(e) =>
                 setSelectedRestaurantId(
@@ -404,7 +404,7 @@ export function ManageTab({
 
             {selectedRestaurantId && (
               <>
-                <div className="space-y-2 border rounded p-2 max-h-48 overflow-auto">
+                <div className="space-y-2  rounded px-2 py-1.5 w-full border border-gray-300 max-h-48 overflow-auto">
                   <div className="text-xs text-gray-500 mb-1">
                     선택된 식당의 기존 메뉴
                   </div>
@@ -421,13 +421,13 @@ export function ManageTab({
                 </div>
 
                 {/* 여러 개 관계 입력 행 */}
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {relationRows.map((row, idx) => (
                     <div key={idx} className="flex gap-2 items-center text-xs">
                       <div className="flex gap-2 flex-col">
                         <div className="flex gap-2 flex-row">
                           <select
-                            className="border rounded px-2 py-1 flex-[2]"
+                            className="rounded px-2 py-1 text-black border border-gray-300 flex-[2]"
                             value={row.menuId ?? ""}
                             onChange={(e) =>
                               handleRelationRowChange(idx, {
@@ -446,7 +446,7 @@ export function ManageTab({
                           </select>
                           <input
                             type="number"
-                            className="border rounded px-2 py-1 flex-1"
+                            className="rounded px-2 py-1 text-black border border-gray-300 flex-1"
                             placeholder="가격"
                             value={row.price ?? ""}
                             onChange={(e) =>
@@ -472,7 +472,7 @@ export function ManageTab({
                             <span>무한리필</span>
                           </label>
                           <input
-                            className="border rounded px-2 py-1 flex-[2]"
+                            className="rounded px-2 py-1 text-black border border-gray-300 flex-[2]"
                             placeholder="메모 (선택)"
                             value={row.note}
                             onChange={(e) =>
@@ -504,7 +504,7 @@ export function ManageTab({
                     </button>
                     <button
                       type="button"
-                      className="px-3 py-1 rounded bg-black text-white text-xs"
+                      className="px-3 py-1 rounded text-sm bg-[#00efef] text-white whitespace-nowrap font-semibold"
                       onClick={handleSaveRelations}
                     >
                       관계 저장
