@@ -15,6 +15,7 @@ import { RestaurantCard } from "./RestaurantCard";
 type Props = {
   menu: Menu;
   onClose: () => void;
+  onToggleBookmark? : (id: number) => void;
   onSelectRestaurant?: (restaurant: Restaurant) => void;
 };
 
@@ -25,7 +26,7 @@ type RelationForm = {
   note: string;
 };
 
-export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
+export function MenuDetailPanel({ menu, onClose, OnToggleBookmark, onSelectRestaurant }: Props) {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [allRestaurants, setAllRestaurants] = useState<Restaurant[]>([]);
   const [loadingRelations, setLoadingRelations] = useState(false);
@@ -78,7 +79,10 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
     };
     void loadAllRestaurants();
   }, [isEditing]);
-
+  const handleToggle = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 상세 보기 클릭과 분리
+    if (onToggleBookmark) onToggleBookmark(menu.id);
+  };
   const handleSaveMenu = async () => {
     setSavingMenu(true);
     try {
@@ -165,12 +169,14 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
             >
               {isEditing ? "수정 닫기" : "수정하기"}
             </button>
-            <button
-              onClick={onClose}
-              className="text-sm px-2 py-1 border rounded"
-            >
-              닫기
-            </button>
+            {onToggleBookmark && (
+                    <button onClick={handleToggle} className="text-xl shrink-0">
+          {menu.bookmark ? (
+            <BookmarkCheck strokeWidth={2.5} color="#ff853eff" />
+          ) : (
+            <Bookmark strokeWidth={2} strokeOpacity={0.25} />
+          )}
+        </button>)}
           </div>
         </div>
 
