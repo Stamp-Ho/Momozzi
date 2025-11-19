@@ -13,6 +13,8 @@ import {
 import { RestaurantCard } from "./RestaurantCard";
 import { MenuCard } from "./MenuCard";
 
+import { CirclePlus, CircleMinus } from 'lucide-react';
+
 type NewRelationRow = {
   menuId: number | null;
   price: number | null;
@@ -485,11 +487,11 @@ export function ManageTab({
                       </div>
                       <button
                         type="button"
-                        className="px-2 py-1 border rounded ml-auto"
+                        className="px-2 py-1 rounded ml-auto"
                         onClick={() => handleRemoveRelationRow(idx)}
                         disabled={relationRows.length === 1}
                       >
-                        -
+                        <CircleMinus strokeWidth={2} color="#ff853eff"/>
                       </button>
                     </div>
                   ))}
@@ -497,10 +499,10 @@ export function ManageTab({
                   <div className="flex justify-between items-center mt-2">
                     <button
                       type="button"
-                      className="px-2 py-1 border rounded text-md"
+                      className="px-2 py-1 rounded text-md"
                       onClick={handleAddRelationRow}
                     >
-                      +
+                      <CirclePlus strokeWidth={2} color="#00efef"/>
                     </button>
                     <button
                       type="button"
