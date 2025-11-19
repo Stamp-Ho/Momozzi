@@ -5,7 +5,13 @@ export const CUISINE_STYLES = [
   "양식",
   "분식",
   "고기",
+  "아시안",
   "디저트",
+  "패스트푸드",
+  "샐러드",
+  "샌드위치",
+  "베이커리",
+  "퓨전",
   "기타",
 ] as const;
 
@@ -18,11 +24,12 @@ export const MAIN_INGREDIENTS = [
   "양",
   "비건",
   "해산물",
+  "면",
   "기타",
 ] as const;
 
 export type MainIngredient = (typeof MAIN_INGREDIENTS)[number];
 
-export const MEAL_TYPES = ["아침", "점심", "저녁", "야식", "간식"] as const;
+export const MEAL_TYPES = ["메인", "사이드", "디저트"] as const;
 
 export type MealType = (typeof MEAL_TYPES)[number];

@@ -2,6 +2,7 @@
 "use client";
 
 import type { Menu } from "@/types/db";
+import { Bookmark, BookmarkCheck } from "lucide-react";
 
 type Props = {
   menu: Menu;
@@ -40,7 +41,11 @@ export function MenuCard({ menu, onToggleBookmark, onSelect }: Props) {
       </div>
       {onToggleBookmark && (
         <button onClick={handleToggle} className="text-xl shrink-0">
-          {menu.bookmark ? "⭐" : "☆"}
+          {menu.bookmark ? (
+            <BookmarkCheck strokeWidth={2.5} color="#ff853eff" />
+          ) : (
+            <Bookmark strokeWidth={2} strokeOpacity={0.25} />
+          )}
         </button>
       )}
     </div>

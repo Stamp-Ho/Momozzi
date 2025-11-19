@@ -8,6 +8,7 @@ export type Restaurant = {
   closeTime: string | null;
   bookmark: boolean | null;
   outerMapUrl: string | null;
+  rating: number | null;
 };
 
 export type Restaurant_Menu_relation = {

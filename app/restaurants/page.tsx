@@ -82,9 +82,7 @@ export default function RestaurantsPage() {
   return (
     <>
       <main className="p-4 max-w-3xl mx-auto space-y-4 bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] min-h-screen">
-        <h1 className="text-xl text-black font-bold mb-1">
-          우리 둘만의 맛집/메뉴 관리
-        </h1>
+        <h1 className="text-xl text-black font-bold mb-3">모모찌~</h1>
 
         {/* 탭 내용 */}
         <div className="h-[90vh]">
@@ -128,7 +126,7 @@ export default function RestaurantsPage() {
         />
       )}
       {/* 탭 바 */}
-      <div className="fixed bottom-2 left-0 w-full flex gap-2 bg-white shadow-[0_-1px_6px_rgba(0,0,0,0.1)] px-6 pt-2">
+      <div className="fixed bottom-0 left-0 w-full flex gap-2 bg-white shadow-[0_-1px_6px_rgba(0,0,0,0.1)] px-6 py-2">
         {[
           { key: "recommend", label: "메뉴 추천", icon: Utensils },
           { key: "bookmark", label: "북마크", icon: Star },
@@ -142,7 +140,7 @@ export default function RestaurantsPage() {
           >
             <tab.icon
               color={`${activeTab === tab.key ? "#00e0e0" : "#b4b4b4ff"}`}
-              size={30}
+              size={26}
             />
             {tab.label}
           </button>

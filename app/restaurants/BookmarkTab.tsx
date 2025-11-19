@@ -1,7 +1,7 @@
 // app/restaurants/BookmarkTab.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { Menu, MenuFilter, Restaurant } from "@/types/db";
 import { CUISINE_STYLES, MEAL_TYPES } from "@/types/enums";
 import { fetchMenusByFilter, updateMenuBookmark } from "@/api/menu/menus";
@@ -11,6 +11,10 @@ import {
 } from "@/api/menu/restaurants";
 import { MenuCard } from "./MenuCard";
 import { RestaurantCard } from "./RestaurantCard";
+
+const PRICE_MIN = 4000;
+const PRICE_MAX = 50000;
+const PRICE_STEP = 2000;
 
 type Props = {
   filter: MenuFilter;
@@ -114,112 +118,203 @@ export function BookmarkTab({
     }
   };
 
+  // 🔽 가격 슬라이더용 핸들러 추가
+  const handlePriceMinChange = (value: number) => {
+    const currentMax = filter.priceMax ?? PRICE_MAX;
+    const nextMin = Math.min(value, currentMax - 5000);
+    handleFilterChange({
+      priceMin: nextMin,
+    });
+  };
+
+  const handlePriceMaxChange = (value: number) => {
+    const currentMin = filter.priceMin ?? PRICE_MIN;
+    const nextMax = Math.max(value, currentMin + 5000);
+    handleFilterChange({
+      priceMax: nextMax,
+    });
+  };
+
+  const effectiveMin = filter.priceMin ?? PRICE_MIN;
+  const effectiveMax = filter.priceMax ?? PRICE_MAX;
   return (
     <section className="space-y-4">
       {/* 필터 + 모드 전환 */}
-      <div className="border rounded p-3 space-y-3">
+      <div className="rounded-xl p-3 space-y-3 bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
         <div className="flex justify-between items-center">
-          <span className="text-xs text-gray-600">북마크 필터</span>
-          <div className="flex gap-1 text-xs">
+          <span className="text-sm text-gray-600 font-bold">북마크 필터</span>
+          <div className="flex gap-2 text-xs">
             <button
               onClick={() => setViewMode("menu")}
-              className={`px-2 py-1 rounded ${
+              className={`px-4 py-1.25 rounded font-bold text-sm ${
                 viewMode === "menu"
-                  ? "bg-black text-white"
-                  : "bg-gray-100 text-gray-700"
+                  ? "bg-[#00efef] text-white"
+                  : "bg-gray-100 text-gray-400"
               }`}
             >
-              메뉴 보기
+              메뉴
             </button>
             <button
               onClick={() => setViewMode("restaurant")}
-              className={`px-2 py-1 rounded ${
+              className={`px-4 py-1.25 rounded font-bold text-sm ${
                 viewMode === "restaurant"
-                  ? "bg-black text-white"
-                  : "bg-gray-100 text-gray-700"
+                  ? "bg-[#00efef] text-white"
+                  : "bg-gray-100 text-gray-400"
               }`}
             >
-              식당 보기
+              식당
             </button>
           </div>
         </div>
 
         {/* 필터 (메뉴 기준) */}
-        <div className="flex gap-2">
-          <div className="flex-1">
-            <label className="block text-xs mb-1">음식 종류</label>
-            <select
-              className="border rounded px-2 py-1 w-full text-sm"
-              value={filter.cuisine_style ?? ""}
-              onChange={(e) =>
-                handleFilterChange({
-                  cuisine_style: (e.target.value || null) as any,
-                })
-              }
-            >
-              <option value="">전체</option>
-              {CUISINE_STYLES.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
-          </div>
+        {viewMode === "menu" ? (
+          <React.Fragment>
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <label className="block text-xs text-black mb-1 font-bold">
+                  음식 종류
+                </label>
+                <select
+                  className="rounded px-2 font-bold py-2 w-full text-sm text-black border border-gray-400"
+                  value={filter.cuisine_style ?? ""}
+                  onChange={(e) =>
+                    handleFilterChange({
+                      cuisine_style: (e.target.value || null) as any,
+                    })
+                  }
+                >
+                  <option className="font-bold bg-white" value="">
+                    전체
+                  </option>
+                  {CUISINE_STYLES.map((s) => (
+                    <option className="font-bold bg-white" key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-          <div className="flex-1">
-            <label className="block text-xs mb-1">식사 타입</label>
-            <select
-              className="border rounded px-2 py-1 w-full text-sm"
-              value={filter.meal_type ?? ""}
-              onChange={(e) =>
-                handleFilterChange({
-                  meal_type: (e.target.value || null) as any,
-                })
-              }
-            >
-              <option value="">전체</option>
-              {MEAL_TYPES.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+              <div className="flex-1">
+                <label className="block text-xs text-black mb-1 font-bold">
+                  식사 타입
+                </label>
+                <select
+                  className="rounded px-2 font-bold py-2 w-full text-sm text-black border border-gray-400"
+                  value={filter.meal_type ?? ""}
+                  onChange={(e) =>
+                    handleFilterChange({
+                      meal_type: (e.target.value || null) as any,
+                    })
+                  }
+                >
+                  <option value="">전체</option>
+                  {MEAL_TYPES.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="flex gap-2 items-end">
+              <div className="flex-1">
+                <label className="block text-xs mb-2 font-bold text-black">
+                  가격 범위
+                </label>
 
-        <div className="flex gap-2">
-          <div className="flex-1">
-            <label className="block text-xs mb-1">최소 가격</label>
-            <input
-              type="number"
-              className="border rounded px-2 py-1 w-full text-sm"
-              value={filter.priceMin ?? ""}
-              onChange={(e) =>
-                handleFilterChange({
-                  priceMin: e.target.value ? Number(e.target.value) : null,
-                })
-              }
-            />
-          </div>
-          <div className="flex-1">
-            <label className="block text-xs mb-1">최대 가격</label>
-            <input
-              type="number"
-              className="border rounded px-2 py-1 w-full text-sm"
-              value={filter.priceMax ?? ""}
-              onChange={(e) =>
-                handleFilterChange({
-                  priceMax: e.target.value ? Number(e.target.value) : null,
-                })
-              }
-            />
-          </div>
-        </div>
+                <div className="px-1">
+                  {/* 슬라이더 트랙 */}
+                  <div className="relative h-1 bg-gray-200 rounded">
+                    {/* 선택된 범위를 보여주는 하이라이트 바 */}
+                    <div
+                      className="absolute h-1 bg-black rounded"
+                      style={{
+                        left: `${
+                          ((effectiveMin - PRICE_MIN) /
+                            (PRICE_MAX - PRICE_MIN)) *
+                          100
+                        }%`,
+                        right: `${
+                          100 -
+                          ((effectiveMax - PRICE_MIN) /
+                            (PRICE_MAX - PRICE_MIN)) *
+                            100
+                        }%`,
+                      }}
+                    />
+
+                    {/* 최소값 핸들 */}
+                    <input
+                      type="range"
+                      min={PRICE_MIN}
+                      max={PRICE_MAX}
+                      step={PRICE_STEP}
+                      value={effectiveMin}
+                      onChange={(e) =>
+                        handlePriceMinChange(Number(e.target.value))
+                      }
+                      className="
+                            absolute -top-1.5 w-full appearance-none pointer-events-none
+                            touch-none
+                            [&::-webkit-slider-thumb]:pointer-events-auto
+                            [&::-webkit-slider-thumb]:appearance-none
+                            [&::-webkit-slider-thumb]:h-4
+                            [&::-webkit-slider-thumb]:w-4
+                            [&::-webkit-slider-thumb]:rounded-full
+                            [&::-webkit-slider-thumb]:bg-black
+                            [&::-moz-range-thumb]:pointer-events-auto
+                            [&::-moz-range-thumb]:appearance-none
+                            [&::-moz-range-thumb]:h-4
+                            [&::-moz-range-thumb]:w-4
+                            [&::-moz-range-thumb]:rounded-full
+                            [&::-moz-range-thumb]:bg-red
+                          "
+                    />
+
+                    {/* 최대값 핸들 */}
+                    <input
+                      type="range"
+                      min={PRICE_MIN}
+                      max={PRICE_MAX}
+                      step={PRICE_STEP}
+                      value={effectiveMax}
+                      onChange={(e) =>
+                        handlePriceMaxChange(Number(e.target.value))
+                      }
+                      onClick={(e) => e.stopPropagation()}
+                      className="
+                            absolute -top-1.5 w-full appearance-none pointer-events-none
+                            touch-none
+                            [&::-webkit-slider-thumb]:pointer-events-auto
+                            [&::-webkit-slider-thumb]:appearance-none
+                            [&::-webkit-slider-thumb]:h-4
+                            [&::-webkit-slider-thumb]:w-4
+                            [&::-webkit-slider-thumb]:rounded-full
+                            [&::-webkit-slider-thumb]:bg-black
+                            [&::-moz-range-thumb]:h-4
+                            [&::-moz-range-thumb]:w-4
+                            [&::-moz-range-thumb]:rounded-full
+                            [&::-moz-range-thumb]:bg-black
+                          "
+                    />
+                  </div>
+
+                  {/* 선택 범위 숫자 표시 */}
+                  <div className="flex justify-between text-xs text-gray-500 mt-2">
+                    <span>{effectiveMin.toLocaleString()}원</span>
+                    <span>{effectiveMax.toLocaleString()}원</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </React.Fragment>
+        ) : null}
       </div>
 
       {/* 컨텐츠 */}
       {viewMode === "menu" && (
-        <div className="space-y-2">
+        <div className="space-y-2 h-121 pb-4 overflow-y-auto">
           {loadingMenus && <div className="text-xs">불러오는 중...</div>}
           {!loadingMenus && menus.length === 0 && (
             <div className="text-xs text-gray-500">
@@ -240,7 +335,7 @@ export function BookmarkTab({
       )}
 
       {viewMode === "restaurant" && (
-        <div className="space-y-2">
+        <div className="space-y-2  h-121 pb-4 overflow-y-auto">
           {loadingRestaurants && <div className="text-xs">불러오는 중...</div>}
           {!loadingRestaurants && restaurants.length === 0 && (
             <div className="text-xs text-gray-500">북마크된 식당이 없어요.</div>

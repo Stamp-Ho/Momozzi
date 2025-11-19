@@ -1,15 +1,16 @@
 // app/restaurants/MenuRecommendTab.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Menu, MenuFilter } from "@/types/db";
 import { CUISINE_STYLES, MEAL_TYPES } from "@/types/enums";
 import { fetchMenusByFilter, updateMenuBookmark } from "@/api/menu/menus";
 import { MenuCard } from "./MenuCard";
 
-const PRICE_MIN = 6000;
-const PRICE_MAX = 40000; // 메뉴 가격 상한 (원하는 값으로 조정 가능)
-const PRICE_STEP = 2000; // 500
+const PRICE_MIN = 4000;
+const PRICE_MAX = 50000;
+const PRICE_STEP = 2000;
+
 type Props = {
   filter: MenuFilter;
   onChangeFilter: (next: MenuFilter) => void;
@@ -44,6 +45,10 @@ export function MenuRecommendTab({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    handleRecommend();
+  }, []);
 
   const handleToggleBookmark = async (id: number) => {
     setMenus((prev) =>
@@ -259,7 +264,7 @@ export function MenuRecommendTab({
           <h3 className="text-xs text-gray-500">
             필터에 해당하는 메뉴 목록 ({menus.length}개)
           </h3>
-          <div className="space-y-2 max-h-98 overflow-auto pb-4">
+          <div className="space-y-2 max-h-97 overflow-auto pb-4">
             {menus.map((m) => (
               <MenuCard
                 key={m.id}
