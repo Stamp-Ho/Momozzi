@@ -204,19 +204,31 @@ export function ManageTab({
     <section className="space-y-6">
       <div className="flex gap-3">
         <button
-          className="border rounded p-3 flex-1 text-black"
+          className=`rounded p-3 flex-1 font-bold text-black ${
+                addingIndex === 1
+                  ? "bg-[#00efef] text-white"
+                  : "bg-gray-100 text-gray-400"
+              }`
           onClick={() => onIndexClick(1)}
         >
           식당 추가
         </button>
         <button
-          className="border rounded p-3 flex-1 text-black"
+          className=`rounded p-3 flex-1 font-bold text-black ${
+                addingIndex === 2
+                  ? "bg-[#00efef] text-white"
+                  : "bg-gray-100 text-gray-400"
+              }`
           onClick={() => onIndexClick(2)}
         >
           메뉴 추가
         </button>
         <button
-          className="border text-black rounded p-3 flex-1"
+          className=`rounded p-3 flex-1 font-bold text-black ${
+                addingIndex === 3
+                  ? "bg-[#00efef] text-white"
+                  : "bg-gray-100 text-gray-400"
+              }`
           onClick={() => onIndexClick(3)}
         >
           관계 추가
