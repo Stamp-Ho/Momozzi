@@ -410,7 +410,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
               <div className="fixed bottom-0 left-0 w-full flex gap-2 px-6 py-2">
         <button
               onClick={onClose}
-              className="text-md px-4 py-2 bg-[#ff853eff]  rounded shadow-md shadow-[#ff853e33]"
+              className="text-md text-white font-semibold w-full px-4 py-2 bg-[#ff853eff]  rounded-xl shadow-lg shadow-[#ff853e53]"
             >
               닫기
             </button>
