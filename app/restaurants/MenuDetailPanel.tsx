@@ -147,11 +147,13 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
   };
   const handleToggleMenuBookmark = async () => {
     const current = menuForm.bookmark ?? false;
-    setMenuForm((prev) => ({...prev , bookmark: !current}));
+    setMenuForm((prev) => ({...prev, bookmark: !current}));
+    setCurrentMenu((prev) => ({...prev, bookmark: !current}));
     try {
       await updateMenuBookmark(menu.id, !current);
     } catch {
       setMenuForm((prev) => ({...prev, bookmark: current}));
+      setCurrentMenu((prev) => ({...prev, bookmark: current}));
     }
   }
   return (
@@ -172,7 +174,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
             </button>
             
             <button onClick={handleToggleMenuBookmark} className="text-xl shrink-0">
-              {menu.bookmark ? (
+              {currentMenu.bookmark ? (
                 <BookmarkCheck strokeWidth={2.5} color="#ff853eff" />
                 ) : (
                 <Bookmark strokeWidth={2} strokeOpacity={0.25} />
