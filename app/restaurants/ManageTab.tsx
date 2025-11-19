@@ -282,7 +282,7 @@ export function ManageTab({
       {/* 메뉴 추가 */}
       {addingIndex === 2 && (
         <div className="rounded-xl p-3 space-y-3 bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
-          <h2 className="text-sm font-bold">메뉴 추가</h2>
+          <h2 className="text-sm font-bold text-black">메뉴 추가</h2>
           <div className="flex flex-col gap-2 text-sm">
             <input
               className="rounded px-2 font-bold py-1.5 w-full text-sm text-black border border-gray-400"
@@ -342,7 +342,7 @@ export function ManageTab({
                 ))}
               </select>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-4">
             <input
               type="number"
               className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-400 flex-5"
@@ -355,7 +355,7 @@ export function ManageTab({
 
             <button
               onClick={handleCreateMenu}
-              className="w-30 px-3 py-2.5 text-md rounded bg-[#00efef] text-white whitespace-nowrap font-bold flex-2"
+              className="w-30 px-3 py-1.5 text-md rounded bg-[#00efef] text-white whitespace-nowrap font-bold flex-2"
             >
               메뉴 추가
             </button>
