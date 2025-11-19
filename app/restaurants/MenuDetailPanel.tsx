@@ -76,10 +76,6 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
     };
     void loadAllRestaurants();
   }, [isEditing]);
-  const handleToggle = (e: React.MouseEvent) => {
-    e.stopPropagation(); // 상세 보기 클릭과 분리
-    if (onToggleBookmark) onToggleBookmark(menu.id);
-  };
   const handleSaveMenu = async () => {
     setSavingMenu(true);
     try {
