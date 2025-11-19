@@ -224,7 +224,7 @@ export function ManageTab({
       </div>
       {/* 식당 추가 */}
       {addingIndex === 1 && (
-        <div className="border rounded p-3 space-y-3">
+        <div className="rounded-xl p-3 space-y-3 bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 text-black">
           <h2 className="text-sm font-semibold">식당 추가</h2>
           <div className="flex flex-col gap-2 text-sm">
             <input
@@ -365,7 +365,7 @@ export function ManageTab({
       )}
       {/* 식당 선택 + 메뉴-관계 등록 */}
       {addingIndex === 3 && (
-        <div className="border rounded p-3 space-y-3">
+        <div className="rounded-xl p-3 space-y-3 bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
           <h2 className="text-sm font-semibold">
             식당에 메뉴 관계 추가 (여러 개 한 번에)
           </h2>
@@ -504,7 +504,7 @@ export function ManageTab({
       )}
 
       {/* 하단에 전체 리스트 간단 프리뷰 */}
-      <div className="flex grid-cols-2 gap-3">
+      <div className="flex grid-cols-2 gap-3 text-black">
         <div className="space-y-2 flex-3">
           <div className="text-xs font-semibold">전체 식당</div>
           <div className="space-y-2 max-h-64 overflow-auto">
