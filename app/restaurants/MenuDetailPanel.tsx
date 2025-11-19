@@ -4,7 +4,10 @@
 import { useEffect, useState } from "react";
 import type { Menu, Restaurant } from "@/types/db";
 import { fetchRestaurantsForMenu, createRelations } from "@/api/menu/relations";
-import { fetchAllRestaurants } from "@/api/menu/restaurants";
+import {
+  fetchAllRestaurants,
+  updateRestaurantBookmark,
+} from "@/api/menu/restaurants";
 import { updateMenu } from "@/api/menu/menus";
 import { CUISINE_STYLES, MAIN_INGREDIENTS, MEAL_TYPES } from "@/types/enums";
 import { RestaurantCard } from "./RestaurantCard";
@@ -126,6 +129,23 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
       console.error(e);
     } finally {
       setSavingRelation(false);
+    }
+  };
+    const handleToggleRestaurantBookmark = async (id: number) => {
+    setRestaurants((prev) =>
+      prev.map((r) =>
+        r.id === id ? { ...r, bookmark: !(r.bookmark ?? false) } : r
+      )
+    );
+    const target = restaurants.find((r) => r.id === id);
+    const current = target?.bookmark ?? false;
+
+    try {
+      await updateRestaurantBookmark(id, !current);
+    } catch {
+      setRestaurants((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, bookmark: current } : r))
+      );
     }
   };
 
@@ -300,6 +320,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
                 <RestaurantCard
                   key={r.id}
                   restaurant={r}
+                  onToggleBookmark={handleToggleRestaurantBookmark}
                   onSelect={onSelectRestaurant}
                 />
               ))}
