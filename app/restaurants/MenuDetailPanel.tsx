@@ -27,7 +27,7 @@ type RelationForm = {
   note: string;
 };
 
-export function MenuDetailPanel({ menu, onClose, OnToggleBookmark, onSelectRestaurant }: Props) {
+export function MenuDetailPanel({ menu, onClose, onToggleBookmark, onSelectRestaurant }: Props) {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [allRestaurants, setAllRestaurants] = useState<Restaurant[]>([]);
   const [loadingRelations, setLoadingRelations] = useState(false);
