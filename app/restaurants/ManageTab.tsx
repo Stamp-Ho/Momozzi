@@ -201,33 +201,33 @@ export function ManageTab({
   }
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-4">
       <div className="flex gap-3">
         <button
-          className={`rounded p-3 flex-1 font-bold text-black ${
+          className={`rounded p-3 flex-1 font-bold text-black shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
                 addingIndex === 1
                   ? "bg-[#00efef] text-white"
-                  : "bg-gray-100 text-gray-400"
+                  : "bg-white text-gray-400"
               }`}
           onClick={() => onIndexClick(1)}
         >
           식당 추가
         </button>
         <button
-          className={`rounded p-3 flex-1 font-bold text-black ${
+          className={`rounded p-3 flex-1 font-bold text-black shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
                 addingIndex === 2
                   ? "bg-[#00efef] text-white"
-                  : "bg-gray-100 text-gray-400"
+                  : "bg-white text-gray-400"
               }`}
           onClick={() => onIndexClick(2)}
         >
           메뉴 추가
         </button>
         <button
-          className={`rounded p-3 flex-1 font-bold text-black ${
+          className={`rounded p-3 flex-1 font-bold text-black shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
                 addingIndex === 3
                   ? "bg-[#00efef] text-white"
-                  : "bg-gray-100 text-gray-400"
+                  : "bg-white text-gray-400"
               }`}
           onClick={() => onIndexClick(3)}
         >
@@ -240,7 +240,7 @@ export function ManageTab({
           <h2 className="text-sm font-semibold">식당 추가</h2>
           <div className="flex flex-col gap-2 text-sm">
             <input
-              className="border rounded px-2 py-1"
+              className="rounded px-2 font-bold py-1.5 w-full text-sm text-black border border-gray-300"
               placeholder="식당 이름"
               value={newRestaurant.name}
               onChange={(e) =>
@@ -248,7 +248,7 @@ export function ManageTab({
               }
             />
             <input
-              className="border rounded px-2 py-1"
+              className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300"
               placeholder="주소"
               value={newRestaurant.address}
               onChange={(e) =>
@@ -257,7 +257,7 @@ export function ManageTab({
             />
             <div className="flex gap-2">
               <input
-                className="border rounded px-2 pr-0 py-1 flex-1"
+                className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300 flex-1"
                 placeholder="오픈 시간 (예: 11:00)"
                 value={newRestaurant.openTime}
                 onChange={(e) =>
@@ -265,7 +265,7 @@ export function ManageTab({
                 }
               />
               <input
-                className="border rounded px-2 pr-0 py-1 flex-1"
+                className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300 flex-1"
                 placeholder="마감 시간 (예: 22:00)"
                 value={newRestaurant.closeTime}
                 onChange={(e) =>
@@ -273,9 +273,10 @@ export function ManageTab({
                 }
               />
             </div>
+            <div className="flex flex-row gap-6">
             <input
-              className="border rounded px-2 py-1"
-              placeholder="지도 링크 (outerMapUrl)"
+              className="rounded px-2 py-1.5 text-sm text-black border border-gray-300 flex-5"
+              placeholder="지도 URL"
               value={newRestaurant.outerMapUrl}
               onChange={(e) =>
                 setNewRestaurant((s) => ({ ...s, outerMapUrl: e.target.value }))
@@ -283,10 +284,11 @@ export function ManageTab({
             />
             <button
               onClick={handleCreateRestaurant}
-              className="self-end px-3 py-1 text-xs rounded bg-black text-white"
+              className="self-end w-30 px-3 py-2.5 text-md rounded bg-[#00efef] text-white whitespace-nowrap font-bold flex-2"
             >
               식당 추가
             </button>
+            </div>
           </div>
         </div>
       )}
@@ -297,7 +299,7 @@ export function ManageTab({
           <h2 className="text-sm font-bold text-black">메뉴 추가</h2>
           <div className="flex flex-col gap-2 text-sm">
             <input
-              className="rounded px-2 font-bold py-1.5 w-full text-sm text-black border border-gray-400"
+              className="rounded px-2 font-bold py-1.5 w-full text-sm text-black border border-gray-300"
               placeholder="메뉴 이름"
               value={newMenu.name}
               onChange={(e) =>
@@ -307,7 +309,7 @@ export function ManageTab({
 
             <div className="flex gap-2">
               <select
-                className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-400"
+                className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300"
                 value={newMenu.cuisine_style}
                 onChange={(e) =>
                   setNewMenu((s) => ({ ...s, cuisine_style: e.target.value }))
@@ -322,7 +324,7 @@ export function ManageTab({
               </select>
 
               <select
-                className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-400"
+                className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300"
                 value={newMenu.main_ingredient}
                 onChange={(e) =>
                   setNewMenu((s) => ({
@@ -340,7 +342,7 @@ export function ManageTab({
               </select>
 
               <select
-                className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-400"
+                className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300"
                 value={newMenu.meal_type}
                 onChange={(e) =>
                   setNewMenu((s) => ({ ...s, meal_type: e.target.value }))
@@ -357,7 +359,7 @@ export function ManageTab({
             <div className="flex gap-4">
             <input
               type="number"
-              className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-400 flex-5"
+              className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300 flex-5"
               placeholder="대략 가격 (선택)"
               value={newMenu.price}
               onChange={(e) =>
