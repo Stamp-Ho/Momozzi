@@ -153,7 +153,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
     const current = menuForm.bookmark ?? false;
     setMenuForm((prev) => {...prev , bookmark: !current});
     try {
-      await updateMenuBookmark(menuForm.id, !current);
+      await updateMenuBookmark(menu.id, !current);
     } catch {
       setMenuForm((prev) => {...prev, bookmark: current});
     }
