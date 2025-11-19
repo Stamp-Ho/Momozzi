@@ -151,7 +151,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
 
   return (
     <div className="fixed inset-0 bg-black/30 flex justify-end z-50">
-      <div className="w-full max-w-md h-full bg-white shadow-xl flex flex-col">
+      <div className="w-full max-w-md h-full bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] shadow-xl flex flex-col">
         {/* 헤더 */}
         <div className="px-4 py-3 border-b flex justify-between items-center">
           <div>
@@ -407,6 +407,14 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
             </div>
           )}
         </div>
+              <div className="fixed bottom-0 left-0 w-full flex gap-2 px-6 py-2">
+        <button
+              onClick={onClose}
+              className="text-md px-4 py-2 bg-[#ff853eff]  rounded shadow-md shadow-[#ff853e33]"
+            >
+              닫기
+            </button>
+              </div>
       </div>
     </div>
   );
