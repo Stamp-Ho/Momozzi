@@ -204,19 +204,19 @@ export function ManageTab({
     <section className="space-y-6">
       <div className="flex gap-3">
         <button
-          className="border rounded p-3 flex-1"
+          className="border rounded p-3 flex-1 text-black"
           onClick={() => onIndexClick(1)}
         >
           식당 추가
         </button>
         <button
-          className="border rounded p-3 flex-1"
+          className="border rounded p-3 flex-1 text-black"
           onClick={() => onIndexClick(2)}
         >
           메뉴 추가
         </button>
         <button
-          className="border rounded p-3 flex-1"
+          className="border text-black rounded p-3 flex-1"
           onClick={() => onIndexClick(3)}
         >
           관계 추가
@@ -281,7 +281,7 @@ export function ManageTab({
 
       {/* 메뉴 추가 */}
       {addingIndex === 2 && (
-        <div className="border rounded p-3 space-y-3">
+        <div className="border text-black rounded p-3 space-y-3">
           <h2 className="text-sm font-semibold">메뉴 추가</h2>
           <div className="flex flex-col gap-2 text-sm">
             <input
