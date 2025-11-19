@@ -11,6 +11,7 @@ import {
 import { updateMenu } from "@/api/menu/menus";
 import { CUISINE_STYLES, MAIN_INGREDIENTS, MEAL_TYPES } from "@/types/enums";
 import { RestaurantCard } from "./RestaurantCard";
+import { Bookmark, BookmarkCheck } from "lucide-react";
 
 type Props = {
   menu: Menu;
