@@ -534,7 +534,7 @@ export function ManageTab({
       <div className="flex flex-col gap-3 text-black pt-16">
         <div className="space-y-2 flex-1">
           <div className="text-xs font-semibold">전체 식당</div>
-          <div className="space-y-2 max-h-64 overflow-auto">
+          <div className="space-y-2 max-h-64 overflow-auto pb-2">
             {restaurants.map((r) => (
               <RestaurantCard
                 key={r.id}
