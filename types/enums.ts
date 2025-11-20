@@ -19,12 +19,22 @@ export type CuisineStyle = (typeof CUISINE_STYLES)[number];
 
 export const MAIN_INGREDIENTS = [
   "돼지",
-  "닭",
   "소",
   "양",
-  "비건",
+  "닭",
+  "오리",
+  "육류",
+  "생선",
   "해산물",
+  "밥",
+  "빵",
   "면",
+  "채소",
+  "버섯",
+  "과일",
+  "두부/콩",
+  "계란",
+  "유제품",
   "기타",
 ] as const;
 
