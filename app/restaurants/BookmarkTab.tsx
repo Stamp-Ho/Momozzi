@@ -8,7 +8,7 @@ import type {
   Restaurant,
   RestaurantFilter,
 } from "@/types/db";
-import { CUISINE_STYLES, MEAL_TYPES } from "@/types/enums";
+import { CUISINE_STYLES, MAIN_INGREDIENTS, MEAL_TYPES } from "@/types/enums";
 import { fetchMenusByFilter, updateMenuBookmark } from "@/api/menu/menus";
 import {
   updateRestaurantBookmark,
@@ -233,6 +233,29 @@ export function BookmarkTab({
                     전체
                   </option>
                   {CUISINE_STYLES.map((s) => (
+                    <option className="font-bold bg-white" key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex-1">
+                <label className="block text-xs text-black mb-1 x-full text-center">
+                  메인 재료
+                </label>
+                <select
+                  className="rounded px-2 py-2 w-full text-sm text-black border border-gray-400"
+                  value={filter.main_ingredient ?? ""}
+                  onChange={(e) =>
+                    handleFilterChange({
+                      main_ingredient: (e.target.value || null) as any,
+                    })
+                  }
+                >
+                  <option className="font-bold bg-white" value="">
+                    전체
+                  </option>
+                  {MAIN_INGREDIENTS.map((s) => (
                     <option className="font-bold bg-white" key={s} value={s}>
                       {s}
                     </option>

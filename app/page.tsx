@@ -30,7 +30,7 @@ export default function HomePage() {
   }
 
   return (
-    <main className="p-6">
+    <main className="p-6 max-w-3xl mx-auto space-y-4 bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] min-h-screen">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-xl font-bold">별이노 4차원 주머니</h1>
         <button
@@ -41,24 +41,10 @@ export default function HomePage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 p-4 gap-8">
+      <div className="grid grid-cols-2 p-3 gap-8">
         <a
           href="/restaurants"
-          className="text-black border p-2 pb-0 inline-block border-gray-300 rounded-xl text-center font-bold "
-        >
-          <Image
-            className="mb-1"
-            src={whatToEat} // 임포트된 이미지 객체 사용
-            alt="나의 로컬 이미지"
-            width={120} // 필수: 원본 이미지의 너비
-            height={120} // 필수: 원본 이미지의 높이
-            priority // (선택 사항) 페이지 로드 시 먼저 로드되도록 설정
-          />
-          메뉴 추천
-        </a>
-        <a
-          href="/restaurants"
-          className="text-black border p-2 pb-0 inline-block border-gray-300 rounded-xl text-center font-bold "
+          className="text-black p-2 pb-1 inline-block bg-white shadow-lg shadow-[#00cccc33] border-[#00eeee44] border border-2 rounded-xl text-center font-bold "
         >
           <Image
             className="mb-1"

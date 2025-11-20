@@ -36,6 +36,7 @@ export type Menu = {
 // 필터 타입 (Menu / Bookmark 탭에서 공유)
 export type MenuFilter = {
   cuisine_style: string | null; // null이면 전체
+  main_ingredient: string | null;
   meal_type: string | null; // null이면 전체
   priceMin: number | null;
   priceMax: number | null;

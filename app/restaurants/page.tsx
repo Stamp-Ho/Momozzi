@@ -10,12 +10,13 @@ import { ManageTab } from "./ManageTab";
 import { MenuDetailPanel } from "./MenuDetailPanel";
 import { RestaurantDetailPanel } from "./RestaurantDetailPanel";
 
-import { Utensils, Star, Settings } from "lucide-react";
+import { HouseHeart, Utensils, Star, Settings } from "lucide-react";
 
 type TabKey = "recommend" | "bookmark" | "manage";
 
 const defaultFilter: MenuFilter = {
   cuisine_style: null,
+  main_ingredient: null,
   meal_type: null,
   priceMin: null,
   priceMax: null,
@@ -103,6 +104,13 @@ export default function RestaurantsPage() {
       )}
       {/* 탭 바 */}
       <div className="fixed bottom-0 left-0 w-full flex gap-2 bg-white shadow-[0_-1px_6px_rgba(0,0,0,0.1)] px-6 py-2">
+        <button
+          onClick={() => router.replace("/")}
+          className={`px-3 py-1 text-sm flex-1 flex flex-col items-center justify-center font-bold text-[#b4b4b4ff]`}
+        >
+          <HouseHeart color="#ff80ceff" size={26} />
+          메인 화면
+        </button>
         {[
           { key: "recommend", label: "메뉴 추천", icon: Utensils },
           { key: "bookmark", label: "북마크", icon: Star },

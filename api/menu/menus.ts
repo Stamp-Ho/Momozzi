@@ -12,6 +12,9 @@ export async function fetchMenusByFilter(
   if (filter.cuisine_style) {
     query = query.eq("cuisine_style", filter.cuisine_style);
   }
+  if (filter.main_ingredient) {
+    query = query.eq("main_ingredient", filter.main_ingredient);
+  }
   if (filter.meal_type) {
     query = query.eq("meal_type", filter.meal_type);
   }
