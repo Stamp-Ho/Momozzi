@@ -40,30 +40,6 @@ export default function RestaurantsPage() {
     setSelectedRestaurant(restaurant);
   };
 
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.touches[0].clientX);
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX == null) return;
-    const diff = e.changedTouches[0].clientX - touchStartX;
-
-    const threshold = 50; // 이 이상 움직여야 슬라이드로 인식
-    if (diff > threshold) {
-      // 오른쪽으로 스와이프 → 이전 탭
-      if (activeTab === "bookmark") setActiveTab("recommend");
-      if (activeTab === "manage") setActiveTab("bookmark");
-    } else if (diff < -threshold) {
-      // 왼쪽으로 스와이프 → 다음 탭
-      if (activeTab === "recommend") setActiveTab("bookmark");
-      if (activeTab === "bookmark") setActiveTab("manage");
-    }
-
-    setTouchStartX(null);
-  };
-
   const [authed, setAuthed] = useState<null | boolean>(null);
 
   useEffect(() => {

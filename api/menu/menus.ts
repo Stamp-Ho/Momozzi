@@ -25,8 +25,8 @@ export async function fetchMenusByFilter(
     query = query.eq("bookmark", true);
   }
 
-  const { data, error } = await query.order("created_at", {
-    ascending: false,
+  const { data, error } = await query.order("name", {
+    ascending: true,
   });
 
   if (error) {
@@ -76,7 +76,7 @@ export async function fetchAllMenus(): Promise<Menu[]> {
   const { data, error } = await supabase
     .from("menu")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("name", { ascending: true });
 
   if (error) {
     console.error("fetchAllMenus error:", error);

@@ -203,34 +203,34 @@ export function ManageTab({
   }
 
   return (
-    <section className="space-y-4 ">
-      <div className="absolute top-14 left-0 right-0 px-4 z-10 space-y-3">
+    <section className="space-y-4 text-black relative">
+      <div className="absolute left-0 right-0 z-10 space-y-3">
         <div className="flex gap-3">
           <button
-            className={`rounded-xl p-3 flex-1 font-bold text-black shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
+            className={`rounded-xl p-3 flex-1 font-bold shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
               addingIndex === 1
                 ? "bg-[#00efef] text-white"
-                : "bg-white text-gray-400"
+                : "bg-white text-gray-700"
             }`}
             onClick={() => onIndexClick(1)}
           >
             식당 추가
           </button>
           <button
-            className={`rounded-xl p-3 flex-1 font-bold text-black shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
+            className={`rounded-xl p-3 flex-1 font-bold shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
               addingIndex === 2
                 ? "bg-[#00efef] text-white"
-                : "bg-white text-gray-400"
+                : "bg-white text-gray-700"
             }`}
             onClick={() => onIndexClick(2)}
           >
             메뉴 추가
           </button>
           <button
-            className={`rounded-xl p-3 flex-1 font-bold text-black shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
+            className={`rounded-xl p-3 flex-1 font-bold shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
               addingIndex === 3
                 ? "bg-[#00efef] text-white"
-                : "bg-white text-gray-400"
+                : "bg-white text-gray-700"
             }`}
             onClick={() => onIndexClick(3)}
           >

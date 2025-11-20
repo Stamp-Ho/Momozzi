@@ -6,9 +6,9 @@ export type Restaurant = {
   address: string;
   openTime: string | null;
   closeTime: string | null;
-  bookmark: boolean | null;
+  bookmark: boolean;
   outerMapUrl: string | null;
-  rating: number | null;
+  rating: number;
 };
 
 export type Restaurant_Menu_relation = {
@@ -20,7 +20,6 @@ export type Restaurant_Menu_relation = {
   price: number | null;
   isInfinit: boolean | null;
   note: string | null;
-  bookmark: boolean | null;
 };
 
 export type Menu = {
@@ -40,4 +39,10 @@ export type MenuFilter = {
   meal_type: string | null; // null이면 전체
   priceMin: number | null;
   priceMax: number | null;
+};
+
+export type RestaurantFilter = {
+  address: string;
+  rating: number;
+  onlyBookmarked: boolean;
 };

@@ -170,7 +170,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
     }
   };
   return (
-    <div className="fixed inset-0 bg-black/30 flex justify-end z-50">
+    <div className="fixed inset-0 bg-black/30 flex justify-end z-50 text-black">
       <div className="w-full max-w-md h-full bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] shadow-xl flex flex-col">
         {/* 헤더 */}
         <div className="px-4 py-3 border-b-2 border-[#707070] flex justify-between items-center">
@@ -272,7 +272,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
                   {isEditing ? (
                     <PencilOff strokeWidth={2} color="#ff853eff" size={24} />
                   ) : (
-                    <Pencil strokeWidth={2} strokeOpacity={0.4} size={24} />
+                    <Pencil strokeWidth={2} strokeOpacity={0.7} size={24} />
                   )}
                 </button>
               </div>

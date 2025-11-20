@@ -2,15 +2,23 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import type { Menu, MenuFilter, Restaurant } from "@/types/db";
+import type {
+  Menu,
+  MenuFilter,
+  Restaurant,
+  RestaurantFilter,
+} from "@/types/db";
 import { CUISINE_STYLES, MEAL_TYPES } from "@/types/enums";
 import { fetchMenusByFilter, updateMenuBookmark } from "@/api/menu/menus";
 import {
-  fetchAllRestaurants,
   updateRestaurantBookmark,
+  fetchRestaurantsByFilter,
+  fetchAllSecondAddress,
 } from "@/api/menu/restaurants";
 import { MenuCard } from "./MenuCard";
 import { RestaurantCard } from "./RestaurantCard";
+import { StarRatingSlider } from "./StarRatingSlider";
+import { Bookmark, BookmarkCheck } from "lucide-react";
 
 const PRICE_MIN = 4000;
 const PRICE_MAX = 50000;
@@ -21,6 +29,12 @@ type Props = {
   onChangeFilter: (next: MenuFilter) => void;
   onSelectMenu?: (menu: Menu) => void;
   onSelectRestaurant?: (restaurant: Restaurant) => void;
+};
+
+const defaultRestaurantFilter = {
+  address: "",
+  rating: 0,
+  onlyBookmarked: false,
 };
 
 type ViewMode = "menu" | "restaurant";
@@ -34,9 +48,15 @@ export function BookmarkTab({
   const [viewMode, setViewMode] = useState<ViewMode>("restaurant");
   const [menus, setMenus] = useState<Menu[]>([]);
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [loadingMenus, setLoadingMenus] = useState(false);
-  const [loadingRestaurants, setLoadingRestaurants] = useState(false);
+  const [loadingMenus, setLoadingMenus] = useState<boolean>(false);
+  const [loadingRestaurants, setLoadingRestaurants] = useState<boolean>(false);
+  const [restaurantFilter, setRestaurantFilter] = useState<RestaurantFilter>(
+    defaultRestaurantFilter
+  );
+  const [loadingAddress, setLoadingAddress] = useState<boolean>(true);
+  const [addressList, setAddressList] = useState<string[]>([]);
 
+  const [test, setTest] = useState(0);
   const handleFilterChange = (patch: Partial<MenuFilter>) => {
     onChangeFilter({ ...filter, ...patch });
   };
@@ -58,12 +78,25 @@ export function BookmarkTab({
   const loadRestaurants = async () => {
     setLoadingRestaurants(true);
     try {
-      const data = await fetchAllRestaurants({ onlyBookmarked: true });
+      const data = await fetchRestaurantsByFilter(restaurantFilter);
       setRestaurants(data);
     } finally {
       setLoadingRestaurants(false);
     }
   };
+
+  useEffect(() => {
+    const getAddress = async () => {
+      try {
+        const data = await fetchAllSecondAddress();
+        setAddressList(data);
+      } finally {
+        setLoadingAddress(false);
+      }
+    };
+    getAddress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (viewMode === "menu") {
@@ -81,6 +114,11 @@ export function BookmarkTab({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
+
+  useEffect(() => {
+    if (viewMode === "restaurant") void loadRestaurants();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [restaurantFilter]);
 
   const handleToggleMenuBookmark = async (id: number) => {
     setMenus((prev) =>
@@ -118,6 +156,11 @@ export function BookmarkTab({
     }
   };
 
+  // 별점 슬라이더용 핸들러
+  const handleRatingStars = (value: number) => {
+    setRestaurantFilter({ ...restaurantFilter, rating: value });
+  };
+
   // 🔽 가격 슬라이더용 핸들러 추가
   const handlePriceMinChange = (value: number) => {
     const currentMax = filter.priceMax ?? PRICE_MAX;
@@ -138,11 +181,13 @@ export function BookmarkTab({
   const effectiveMin = filter.priceMin ?? PRICE_MIN;
   const effectiveMax = filter.priceMax ?? PRICE_MAX;
   return (
-    <section className="space-y-4">
+    <section className="space-y-4 text-black">
       {/* 필터 + 모드 전환 */}
       <div className="rounded-xl p-3 space-y-3 bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
         <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-600 font-bold">북마크 필터</span>
+          <span className="text-sm text-gray-600 font-bold">
+            {viewMode === "menu" ? "북마크 메뉴 필터" : "식당 조회 필터"}
+          </span>
           <div className="flex gap-2 text-xs">
             <button
               onClick={() => setViewMode("menu")}
@@ -172,11 +217,11 @@ export function BookmarkTab({
           <React.Fragment>
             <div className="flex gap-2">
               <div className="flex-1">
-                <label className="block text-xs text-black mb-1 font-bold">
+                <label className="block text-xs text-black mb-1 x-full text-center">
                   음식 종류
                 </label>
                 <select
-                  className="rounded px-2 font-bold py-2 w-full text-sm text-black border border-gray-400"
+                  className="rounded px-2 py-2 w-full text-sm text-black border border-gray-400"
                   value={filter.cuisine_style ?? ""}
                   onChange={(e) =>
                     handleFilterChange({
@@ -196,11 +241,11 @@ export function BookmarkTab({
               </div>
 
               <div className="flex-1">
-                <label className="block text-xs text-black mb-1 font-bold">
+                <label className="block text-xs text-black mb-1 x-full text-center">
                   식사 타입
                 </label>
                 <select
-                  className="rounded px-2 font-bold py-2 w-full text-sm text-black border border-gray-400"
+                  className="rounded px-2 py-2 w-full text-sm text-black border border-gray-400"
                   value={filter.meal_type ?? ""}
                   onChange={(e) =>
                     handleFilterChange({
@@ -219,7 +264,7 @@ export function BookmarkTab({
             </div>
             <div className="flex gap-2 items-end">
               <div className="flex-1">
-                <label className="block text-xs mb-2 font-bold text-black">
+                <label className="block text-xs mb-2 text-black x-full text-center">
                   가격 범위
                 </label>
 
@@ -309,7 +354,72 @@ export function BookmarkTab({
               </div>
             </div>
           </React.Fragment>
-        ) : null}
+        ) : (
+          <React.Fragment>
+            <div className="flex flex-row gap-4.5">
+              <div className="w-22.5">
+                <label className="block text-xs text-black mb-1 x-full text-center">
+                  지역
+                </label>
+                <select
+                  className="rounded px-2 py-2 w-full text-sm text-black border border-gray-400"
+                  value={restaurantFilter.address ?? ""}
+                  onChange={(e) =>
+                    setRestaurantFilter({
+                      ...restaurantFilter,
+                      address: e.target.value,
+                    })
+                  }
+                  disabled={loadingAddress}
+                >
+                  <option className="font-bold bg-white" value="">
+                    전체
+                  </option>
+                  {addressList.map((s, index) => (
+                    <option
+                      className="font-bold bg-white"
+                      key={index}
+                      value={s}
+                    >
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="">
+                <label className="block text-xs text-black mb-1 x-full text-center">
+                  별점
+                </label>
+                <StarRatingSlider
+                  value={restaurantFilter.rating}
+                  onChange={handleRatingStars}
+                />
+              </div>
+              <div className="mr-8 ml-auto">
+                <label className="block text-xs text-black mb-1">북마크</label>
+                <button
+                  onClick={() => {
+                    setRestaurantFilter({
+                      ...restaurantFilter,
+                      onlyBookmarked: !restaurantFilter.onlyBookmarked,
+                    });
+                  }}
+                  className="text-xl shrink-0 ml-0.25"
+                >
+                  {restaurantFilter.onlyBookmarked ? (
+                    <BookmarkCheck
+                      strokeWidth={2.5}
+                      color="#ff853eff"
+                      size={32}
+                    />
+                  ) : (
+                    <Bookmark strokeWidth={2} strokeOpacity={0.4} size={32} />
+                  )}
+                </button>
+              </div>
+            </div>
+          </React.Fragment>
+        )}
       </div>
 
       {/* 컨텐츠 */}
@@ -337,7 +447,7 @@ export function BookmarkTab({
       )}
 
       {viewMode === "restaurant" && (
-        <div className="space-y-2  h-121 pb-4 overflow-y-auto">
+        <div className="space-y-2  h-136 pb-4 overflow-y-auto pb-18">
           {loadingRestaurants ? (
             <div className="text-xs">불러오는 중...</div>
           ) : restaurants.length === 0 ? (

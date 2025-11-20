@@ -25,6 +25,7 @@ import {
   StarHalf,
   Trash,
 } from "lucide-react";
+import { MEAL_TYPES } from "@/types/enums";
 
 type Props = {
   restaurant: Restaurant;
@@ -110,6 +111,19 @@ export function RestaurantDetailPanel({
           };
         })
         .filter((x): x is MenuWithRelation => x !== null);
+
+      merged.sort((a, b) => {
+        const orderA = MEAL_TYPES.indexOf(a.menu.meal_type as any);
+        const orderB = MEAL_TYPES.indexOf(b.menu.meal_type as any);
+
+        // 미정의 타입은 뒤로 보냄
+        const safeA = orderA === -1 ? 999 : orderA;
+        const safeB = orderB === -1 ? 999 : orderB;
+
+        if (safeA !== safeB) return safeA - safeB;
+
+        return a.menu.name.localeCompare(b.menu.name);
+      });
 
       setMenuRelations(merged);
     } finally {
@@ -203,7 +217,7 @@ export function RestaurantDetailPanel({
     }
   };
   return (
-    <div className="fixed inset-0 bg-black/30 flex justify-end z-50">
+    <div className="fixed inset-0 bg-black/30 flex justify-end z-50 text-black">
       <div className="w-full max-w-md h-full bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] shadow-xl flex flex-col">
         {/* 헤더 */}
         <div className="px-4 py-3 border-b-2 border-[#707070] flex justify-between items-center">
@@ -289,7 +303,7 @@ export function RestaurantDetailPanel({
                   {isEditing ? (
                     <PencilOff strokeWidth={2} color="#ff853eff" size={24} />
                   ) : (
-                    <Pencil strokeWidth={2} strokeOpacity={0.4} size={24} />
+                    <Pencil strokeWidth={2} strokeOpacity={0.7} size={24} />
                   )}
                 </button>
               </div>

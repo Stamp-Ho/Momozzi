@@ -100,16 +100,16 @@ export function MenuRecommendTab({
   const effectiveMin = filter.priceMin ?? PRICE_MIN;
   const effectiveMax = filter.priceMax ?? PRICE_MAX;
   return (
-    <section className="space-y-4">
+    <section className="space-y-4 text-black">
       {/* 필터 영역 */}
       <div className="rounded-xl p-3 space-y-3 bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
         <div className="flex gap-2">
           <div className="flex-1">
-            <label className="block text-xs text-black mb-1 font-semibold">
+            <label className="block text-xs text-black mb-1 x-full text-center">
               음식 종류
             </label>
             <select
-              className="rounded px-2 font-bold py-2 w-full text-sm text-black border border-gray-400"
+              className="rounded px-2 py-2 w-full text-sm text-black border border-gray-400"
               value={filter.cuisine_style ?? ""}
               onChange={(e) =>
                 handleFilterChange({
@@ -129,11 +129,11 @@ export function MenuRecommendTab({
           </div>
 
           <div className="flex-1">
-            <label className="block text-xs text-black mb-1 font-semibold">
+            <label className="block text-xs text-black mb-1 x-full text-center">
               식사 타입
             </label>
             <select
-              className="rounded px-2 font-bold py-2 w-full text-sm text-black border border-gray-400"
+              className="rounded px-2 py-2 w-full text-sm text-black border border-gray-400"
               value={filter.meal_type ?? ""}
               onChange={(e) =>
                 handleFilterChange({
@@ -152,7 +152,7 @@ export function MenuRecommendTab({
         </div>
         <div className="flex gap-2 items-end">
           <div className="flex-1">
-            <label className="block text-xs mb-2 font-semibold text-black">
+            <label className="block text-xs mb-2 x-full text-center text-black">
               가격 범위
             </label>
 

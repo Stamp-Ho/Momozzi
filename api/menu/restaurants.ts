@@ -1,7 +1,7 @@
 // api/restaurants.ts
 
 import { supabase } from "@/lib/supabaseClient";
-import type { Restaurant } from "@/types/db";
+import type { Restaurant, RestaurantFilter } from "@/types/db";
 
 export async function fetchAllRestaurants(options?: {
   onlyBookmarked?: boolean;
@@ -12,12 +12,55 @@ export async function fetchAllRestaurants(options?: {
     query = query.eq("bookmark", true);
   }
 
-  const { data, error } = await query.order("created_at", {
-    ascending: false,
+  const { data, error } = await query.order("name", {
+    ascending: true,
   });
 
   if (error) {
     console.error("fetchAllRestaurants error:", error);
+    throw error;
+  }
+
+  return (data ?? []) as Restaurant[];
+}
+
+export async function fetchAllSecondAddress(): Promise<string[]> {
+  let query = supabase.from("restaurant").select("address");
+
+  const { data, error } = await query.order("address", { ascending: true });
+  if (error) {
+    console.error("fetchAllSecondAddress error:", error);
+    throw error;
+  }
+  const secondAddress: string[] = data.map(
+    (d) => d.address?.split(" ").length > 2 && d.address.split(" ")[1]
+  );
+  return secondAddress;
+}
+
+export async function fetchRestaurantsByFilter(
+  filter: RestaurantFilter
+): Promise<Restaurant[]> {
+  let query = supabase.from("restaurant").select("*");
+
+  if (filter.address) {
+    query = query.ilike("address", `%${filter.address}%`);
+  }
+
+  if (filter.rating != null) {
+    // null, undefined 둘 다 체크
+    query = query.gte("rating", filter.rating);
+  }
+
+  if (filter.onlyBookmarked) {
+    query = query.eq("bookmark", true);
+  }
+
+  const { data, error } = await query.order("name", {
+    ascending: true,
+  });
+  if (error) {
+    console.error("fetchRestaurantsByFilter error:", error);
     throw error;
   }
 
