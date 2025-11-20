@@ -68,6 +68,7 @@ export async function updateRestaurant(
     closeTime?: string | null;
     outerMapUrl?: string | null;
     bookmark?: boolean | null;
+    rating?: number | null;
   }
 ): Promise<Restaurant> {
   const { data, error } = await supabase

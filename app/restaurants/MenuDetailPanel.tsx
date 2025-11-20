@@ -14,7 +14,6 @@ import { RestaurantCard } from "./RestaurantCard";
 import {
   Bookmark,
   BookmarkCheck,
-  SquarePen,
   Save,
   PencilOff,
   Pencil,
@@ -174,7 +173,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
     <div className="fixed inset-0 bg-black/30 flex justify-end z-50">
       <div className="w-full max-w-md h-full bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] shadow-xl flex flex-col">
         {/* 헤더 */}
-        <div className="px-4 py-3 border-b flex justify-between items-center">
+        <div className="px-4 py-3 border-b-2 border-[#707070] flex justify-between items-center">
           <div>
             <div className="text-sm text-gray-500">메뉴 상세</div>
             <div className="text-lg font-semibold">{currentMenu.name}</div>
@@ -207,7 +206,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
                     이름:{" "}
                     {isEditing ? (
                       <input
-                        className="border rounded px-2 py-0.75 w-48 border-gray-400"
+                        className="border rounded px-2 py-0.75 w-48 border-gray-300"
                         placeholder="메뉴 이름"
                         value={menuForm.name}
                         onChange={(e) =>
@@ -222,7 +221,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
                     종류:{" "}
                     {isEditing ? (
                       <select
-                        className="border rounded px-1 py-0.75 flex-1 border-gray-400"
+                        className="border rounded px-1 py-0.75 flex-1 border-gray-300"
                         value={menuForm.cuisine_style}
                         onChange={(e) =>
                           setMenuForm((s) => ({
@@ -244,7 +243,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
                     {" / "}
                     {isEditing ? (
                       <select
-                        className="border rounded px-1 py-0.75 flex-1 border-gray-400"
+                        className="border rounded px-1 py-0.75 flex-1 border-gray-300"
                         value={menuForm.meal_type}
                         onChange={(e) =>
                           setMenuForm((s) => ({
@@ -283,7 +282,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
                     주 재료:{" "}
                     {isEditing ? (
                       <select
-                        className="border rounded px-1 py-0.75 flex-1 border-gray-400"
+                        className="border rounded px-1 py-0.75 flex-1 border-gray-300"
                         value={menuForm.main_ingredient}
                         onChange={(e) =>
                           setMenuForm((s) => ({
@@ -308,7 +307,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
                     {isEditing ? (
                       <input
                         type="number"
-                        className="border rounded px-2 py-0.75 flex-1 w-17 border-gray-400"
+                        className="border rounded px-2 py-0.75 flex-1 w-17 border-gray-300"
                         placeholder="기준 가격"
                         value={menuForm.price}
                         onChange={(e) =>
@@ -352,9 +351,9 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
                 식당 추가
               </button>
             )}
-            {/* 수정 모드: relation 추가 */}
+            {/* 추가 모드: relation 추가 */}
             {isAddingRelation && (
-              <div className=" rounded-lg p-2 pl-3 space-y-1  bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
+              <div className=" rounded-lg p-2 pl-3 h-[142px] space-y-1  bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
                 <div className="text-xs text-gray-500 mb-1">
                   이 메뉴를 제공하는 식당 추가
                 </div>
@@ -365,7 +364,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
                   <div className="flex flex-col gap-1.5 text-sm">
                     <div className="flex flex-row gap-4 items-center">
                       <select
-                        className="border rounded px-1.5 py-0.75 flex-3 border-gray-400"
+                        className="border rounded px-1.5 py-0.75 flex-3 border-gray-300"
                         value={relationForm.restaurantId ?? ""}
                         onChange={(e) =>
                           setRelationForm((s) => ({
@@ -385,7 +384,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
                       </select>
                       <input
                         type="number"
-                        className="mr-1 border rounded px-2 py-0.75 w-10 flex-1 border-gray-400"
+                        className="mr-1 border rounded px-2 py-0.75 w-10 flex-1 border-gray-300"
                         placeholder="가격 (선택)"
                         value={relationForm.price}
                         onChange={(e) =>
@@ -398,7 +397,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
                     </div>
                     <div className="flex gap-2 items-center">
                       <input
-                        className="border rounded px-2.5 py-0.75 flex-1 border-gray-400 mr-3.5"
+                        className="border rounded px-2.5 py-0.75 flex-1 border-gray-300 mr-3.5"
                         placeholder="메모 (선택)"
                         value={relationForm.note}
                         onChange={(e) =>
@@ -444,10 +443,16 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
             {loadingRelations && <div className="text-xs">불러오는 중...</div>}
             {!loadingRelations && restaurants.length === 0 && (
               <div className="text-xs text-gray-500 ml-3">
-                아직 이 메뉴와 연결된 식당이 없어요.
+                아직 이 메뉴를 가진 식당이 없어요. 추가해 바보뚜!!!
               </div>
             )}
-            <div className="space-y-2">
+            <div
+              className="space-y-2 overflow-y-auto pb-13"
+              style={{
+                height:
+                  490 - (isAddingRelation ? 104 : 0) - (isEditing ? 28 : 0),
+              }}
+            >
               {restaurants.map((r) => (
                 <RestaurantCard
                   key={r.id}

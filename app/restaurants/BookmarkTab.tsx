@@ -315,41 +315,45 @@ export function BookmarkTab({
       {/* 컨텐츠 */}
       {viewMode === "menu" && (
         <div className="space-y-2 h-121 pb-4 overflow-y-auto">
-          {loadingMenus && <div className="text-xs">불러오는 중...</div>}
-          {!loadingMenus && menus.length === 0 && (
+          {loadingMenus ? (
+            <div className="text-xs">불러오는 중...</div>
+          ) : menus.length === 0 ? (
             <div className="text-xs text-gray-500">
               북마크된 메뉴가 없거나 필터에 해당하는 메뉴가 없어요.
             </div>
+          ) : (
+            <div className="space-y-2">
+              {menus.map((m) => (
+                <MenuCard
+                  key={m.id}
+                  menu={m}
+                  onToggleBookmark={handleToggleMenuBookmark}
+                  onSelect={onSelectMenu}
+                />
+              ))}
+            </div>
           )}
-          <div className="space-y-2">
-            {menus.map((m) => (
-              <MenuCard
-                key={m.id}
-                menu={m}
-                onToggleBookmark={handleToggleMenuBookmark}
-                onSelect={onSelectMenu}
-              />
-            ))}
-          </div>
         </div>
       )}
 
       {viewMode === "restaurant" && (
         <div className="space-y-2  h-121 pb-4 overflow-y-auto">
-          {loadingRestaurants && <div className="text-xs">불러오는 중...</div>}
-          {!loadingRestaurants && restaurants.length === 0 && (
+          {loadingRestaurants ? (
+            <div className="text-xs">불러오는 중...</div>
+          ) : restaurants.length === 0 ? (
             <div className="text-xs text-gray-500">북마크된 식당이 없어요.</div>
+          ) : (
+            <div className="space-y-2">
+              {restaurants.map((r) => (
+                <RestaurantCard
+                  key={r.id}
+                  restaurant={r}
+                  onToggleBookmark={handleToggleRestaurantBookmark}
+                  onSelect={onSelectRestaurant}
+                />
+              ))}
+            </div>
           )}
-          <div className="space-y-2">
-            {restaurants.map((r) => (
-              <RestaurantCard
-                key={r.id}
-                restaurant={r}
-                onToggleBookmark={handleToggleRestaurantBookmark}
-                onSelect={onSelectRestaurant}
-              />
-            ))}
-          </div>
         </div>
       )}
     </section>

@@ -63,7 +63,7 @@ export function RestaurantCard({
         {restaurant.outerMapUrl && onToggleBookmark && (
           <button
             onClick={handleOpenMap}
-            className="text-sm px-3 py-2 border rounded-lg bg-[#00efef] text-white whitespace-nowrap font-bold"
+            className="text-sm px-3 py-2 rounded-lg bg-[#00efef] text-white whitespace-nowrap font-bold"
           >
             지도
           </button>

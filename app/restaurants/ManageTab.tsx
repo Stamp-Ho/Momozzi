@@ -13,7 +13,7 @@ import {
 import { RestaurantCard } from "./RestaurantCard";
 import { MenuCard } from "./MenuCard";
 
-import { CirclePlus, CircleMinus } from 'lucide-react';
+import { CirclePlus, CircleMinus } from "lucide-react";
 
 type NewRelationRow = {
   menuId: number | null;
@@ -203,325 +203,336 @@ export function ManageTab({
   }
 
   return (
-    <section className="space-y-4">
-      <div className="flex gap-3">
-        <button
-          className={`rounded p-3 flex-1 font-bold text-black shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
-                addingIndex === 1
-                  ? "bg-[#00efef] text-white"
-                  : "bg-white text-gray-400"
-              }`}
-          onClick={() => onIndexClick(1)}
-        >
-          식당 추가
-        </button>
-        <button
-          className={`rounded p-3 flex-1 font-bold text-black shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
-                addingIndex === 2
-                  ? "bg-[#00efef] text-white"
-                  : "bg-white text-gray-400"
-              }`}
-          onClick={() => onIndexClick(2)}
-        >
-          메뉴 추가
-        </button>
-        <button
-          className={`rounded p-3 flex-1 font-bold text-black shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
-                addingIndex === 3
-                  ? "bg-[#00efef] text-white"
-                  : "bg-white text-gray-400"
-              }`}
-          onClick={() => onIndexClick(3)}
-        >
-          관계 추가
-        </button>
-      </div>
-      {/* 식당 추가 */}
-      {addingIndex === 1 && (
-        <div className="rounded-xl p-3 space-y-3 bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 text-black">
-          <h2 className="text-sm font-semibold">식당 추가</h2>
-          <div className="flex flex-col gap-2 text-sm">
-            <input
-              className="rounded px-2 font-bold py-1.5 w-full text-sm text-black border border-gray-300"
-              placeholder="식당 이름"
-              value={newRestaurant.name}
-              onChange={(e) =>
-                setNewRestaurant((s) => ({ ...s, name: e.target.value }))
-              }
-            />
-            <input
-              className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300"
-              placeholder="주소"
-              value={newRestaurant.address}
-              onChange={(e) =>
-                setNewRestaurant((s) => ({ ...s, address: e.target.value }))
-              }
-            />
-            <div className="flex gap-2">
+    <section className="space-y-4 ">
+      <div className="fixed top-14 left-0 right-0 px-4 z-10 space-y-3">
+        <div className="flex gap-3">
+          <button
+            className={`rounded-xl p-3 flex-1 font-bold text-black shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
+              addingIndex === 1
+                ? "bg-[#00efef] text-white"
+                : "bg-white text-gray-400"
+            }`}
+            onClick={() => onIndexClick(1)}
+          >
+            식당 추가
+          </button>
+          <button
+            className={`rounded-xl p-3 flex-1 font-bold text-black shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
+              addingIndex === 2
+                ? "bg-[#00efef] text-white"
+                : "bg-white text-gray-400"
+            }`}
+            onClick={() => onIndexClick(2)}
+          >
+            메뉴 추가
+          </button>
+          <button
+            className={`rounded-xl p-3 flex-1 font-bold text-black shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${
+              addingIndex === 3
+                ? "bg-[#00efef] text-white"
+                : "bg-white text-gray-400"
+            }`}
+            onClick={() => onIndexClick(3)}
+          >
+            관계 추가
+          </button>
+        </div>
+        {/* 식당 추가 */}
+        {addingIndex === 1 && (
+          <div className="rounded-xl p-3 space-y-3 bg-white shadow-xl shadow-[#00cccc33] border-[#00eeee44] border border-1.5 text-black">
+            <h2 className="text-sm font-semibold">식당 추가</h2>
+            <div className="flex flex-col gap-2 text-sm">
               <input
-                className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300 flex-1"
-                placeholder="오픈 시간 (예: 11:00)"
-                value={newRestaurant.openTime}
+                className="rounded px-2 font-bold py-1.5 w-full text-sm text-black border border-gray-300"
+                placeholder="식당 이름"
+                value={newRestaurant.name}
                 onChange={(e) =>
-                  setNewRestaurant((s) => ({ ...s, openTime: e.target.value }))
+                  setNewRestaurant((s) => ({ ...s, name: e.target.value }))
                 }
               />
               <input
-                className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300 flex-1"
-                placeholder="마감 시간 (예: 22:00)"
-                value={newRestaurant.closeTime}
+                className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300"
+                placeholder="주소"
+                value={newRestaurant.address}
                 onChange={(e) =>
-                  setNewRestaurant((s) => ({ ...s, closeTime: e.target.value }))
+                  setNewRestaurant((s) => ({ ...s, address: e.target.value }))
                 }
               />
-            </div>
-            <div className="flex flex-row gap-6">
-            <input
-              className="rounded px-2 py-1.5 text-sm text-black border border-gray-300 flex-5"
-              placeholder="지도 URL"
-              value={newRestaurant.outerMapUrl}
-              onChange={(e) =>
-                setNewRestaurant((s) => ({ ...s, outerMapUrl: e.target.value }))
-              }
-            />
-            <button
-              onClick={handleCreateRestaurant}
-              className="self-end w-30 px-3 py-1.5 text-md rounded bg-[#00efef] text-white whitespace-nowrap font-bold flex-2"
-            >
-              식당 추가
-            </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 메뉴 추가 */}
-      {addingIndex === 2 && (
-        <div className="rounded-xl p-3 space-y-3 bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
-          <h2 className="text-sm font-semibold text-black">메뉴 추가</h2>
-          <div className="flex flex-col gap-2 text-sm">
-            <input
-              className="rounded px-2 font-bold py-1.5 w-full text-sm text-black border border-gray-300"
-              placeholder="메뉴 이름"
-              value={newMenu.name}
-              onChange={(e) =>
-                setNewMenu((s) => ({ ...s, name: e.target.value }))
-              }
-            />
-
-            <div className="flex gap-2">
-              <select
-                className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300"
-                value={newMenu.cuisine_style}
-                onChange={(e) =>
-                  setNewMenu((s) => ({ ...s, cuisine_style: e.target.value }))
-                }
-              >
-                <option value="">음식 종류</option>
-                {CUISINE_STYLES.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
-
-              <select
-                className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300"
-                value={newMenu.main_ingredient}
-                onChange={(e) =>
-                  setNewMenu((s) => ({
-                    ...s,
-                    main_ingredient: e.target.value,
-                  }))
-                }
-              >
-                <option value="">주요 재료</option>
-                {MAIN_INGREDIENTS.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
-
-              <select
-                className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300"
-                value={newMenu.meal_type}
-                onChange={(e) =>
-                  setNewMenu((s) => ({ ...s, meal_type: e.target.value }))
-                }
-              >
-                <option value="">식사 타입</option>
-                {MEAL_TYPES.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex gap-4">
-            <input
-              type="number"
-              className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300 flex-5"
-              placeholder="대략 가격 (선택)"
-              value={newMenu.price}
-              onChange={(e) =>
-                setNewMenu((s) => ({ ...s, price: e.target.value }))
-              }
-            />
-
-            <button
-              onClick={handleCreateMenu}
-              className="w-30 px-3 py-1.5 text-md rounded bg-[#00efef] text-white whitespace-nowrap font-bold flex-2"
-            >
-              메뉴 추가
-            </button>
+              <div className="flex gap-2">
+                <input
+                  className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300 flex-1"
+                  placeholder="오픈 시간 (예: 11:00)"
+                  value={newRestaurant.openTime}
+                  onChange={(e) =>
+                    setNewRestaurant((s) => ({
+                      ...s,
+                      openTime: e.target.value,
+                    }))
+                  }
+                />
+                <input
+                  className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300 flex-1"
+                  placeholder="마감 시간 (예: 22:00)"
+                  value={newRestaurant.closeTime}
+                  onChange={(e) =>
+                    setNewRestaurant((s) => ({
+                      ...s,
+                      closeTime: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+              <div className="flex flex-row gap-6">
+                <input
+                  className="rounded px-2 py-1.5 text-sm text-black border border-gray-300 flex-5"
+                  placeholder="지도 URL"
+                  value={newRestaurant.outerMapUrl}
+                  onChange={(e) =>
+                    setNewRestaurant((s) => ({
+                      ...s,
+                      outerMapUrl: e.target.value,
+                    }))
+                  }
+                />
+                <button
+                  onClick={handleCreateRestaurant}
+                  className="self-end w-30 px-3 py-1.5 text-md rounded bg-[#00efef] text-white whitespace-nowrap font-bold flex-2"
+                >
+                  식당 추가
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-      {/* 식당 선택 + 메뉴-관계 등록 */}
-      {addingIndex === 3 && (
-        <div className="rounded-xl p-3 space-y-3 bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
-          <h2 className="text-sm font-semibold">
-            식당에 메뉴 추가
-          </h2>
+        )}
 
-          <div className="flex flex-col gap-2 text-sm">
-            <select
-              className="rounded px-2 font-bold py-1.5 w-full text-sm text-black border border-gray-300"
-              value={selectedRestaurantId ?? ""}
-              onChange={(e) =>
-                setSelectedRestaurantId(
-                  e.target.value ? Number(e.target.value) : null
-                )
-              }
-            >
-              <option value="">식당 선택</option>
-              {restaurants.map((r) => (
-                <option key={r.id} value={r.id}>
-                  {r.name}
-                </option>
-              ))}
-            </select>
+        {/* 메뉴 추가 */}
+        {addingIndex === 2 && (
+          <div className="rounded-xl p-3 space-y-3 bg-white shadow-xl shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
+            <h2 className="text-sm font-semibold text-black">메뉴 추가</h2>
+            <div className="flex flex-col gap-2 text-sm">
+              <input
+                className="rounded px-2 font-bold py-1.5 w-full text-sm text-black border border-gray-300"
+                placeholder="메뉴 이름"
+                value={newMenu.name}
+                onChange={(e) =>
+                  setNewMenu((s) => ({ ...s, name: e.target.value }))
+                }
+              />
 
-            {selectedRestaurantId && (
-              <>
-                <div className="space-y-2  rounded px-2 py-1.5 w-full border border-gray-300 max-h-48 overflow-auto">
-                  <div className="text-xs text-gray-500 mb-1">
-                    선택된 식당의 기존 메뉴
-                  </div>
-                  {relationsPreview.length === 0 && (
-                    <div className="text-xs text-gray-400">
-                      아직 등록된 메뉴가 없습니다.
-                    </div>
-                  )}
-                  {relationsPreview.map((txt, i) => (
-                    <div key={i} className="text-xs">
-                      • {txt}
-                    </div>
+              <div className="flex gap-2">
+                <select
+                  className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300"
+                  value={newMenu.cuisine_style}
+                  onChange={(e) =>
+                    setNewMenu((s) => ({ ...s, cuisine_style: e.target.value }))
+                  }
+                >
+                  <option value="">음식 종류</option>
+                  {CUISINE_STYLES.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
                   ))}
-                </div>
+                </select>
 
-                {/* 여러 개 관계 입력 행 */}
-                <div className="space-y-3">
-                  {relationRows.map((row, idx) => (
-                    <div key={idx} className="flex gap-2 items-center text-xs">
-                      <div className="flex gap-2 flex-col">
-                        <div className="flex gap-2 flex-row">
-                          <select
-                            className="rounded px-2 py-1 text-black border border-gray-300 flex-[2]"
-                            value={row.menuId ?? ""}
-                            onChange={(e) =>
-                              handleRelationRowChange(idx, {
-                                menuId: e.target.value
-                                  ? Number(e.target.value)
-                                  : null,
-                              })
-                            }
-                          >
-                            <option value="">메뉴 선택</option>
-                            {menus.map((m) => (
-                              <option key={m.id} value={m.id}>
-                                {m.name}
-                              </option>
-                            ))}
-                          </select>
-                          <input
-                            type="number"
-                            className="rounded px-2 py-1 text-black border border-gray-300 flex-1"
-                            placeholder="가격"
-                            value={row.price ?? ""}
-                            onChange={(e) =>
-                              handleRelationRowChange(idx, {
-                                price: e.target.value
-                                  ? Number(e.target.value)
-                                  : null,
-                              })
-                            }
-                          />
-                        </div>
-                        <div className="flex gap-2 flex-row">
-                          <label className="flex items-center gap-1 flex-1 ml-8">
-                            <input
-                              type="checkbox"
-                              checked={!!row.isInfinit}
+                <select
+                  className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300"
+                  value={newMenu.main_ingredient}
+                  onChange={(e) =>
+                    setNewMenu((s) => ({
+                      ...s,
+                      main_ingredient: e.target.value,
+                    }))
+                  }
+                >
+                  <option value="">주요 재료</option>
+                  {MAIN_INGREDIENTS.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300"
+                  value={newMenu.meal_type}
+                  onChange={(e) =>
+                    setNewMenu((s) => ({ ...s, meal_type: e.target.value }))
+                  }
+                >
+                  <option value="">식사 타입</option>
+                  {MEAL_TYPES.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex gap-4">
+                <input
+                  type="number"
+                  className="rounded px-2 py-1.5 w-full text-sm text-black border border-gray-300 flex-5"
+                  placeholder="대략 가격 (선택)"
+                  value={newMenu.price}
+                  onChange={(e) =>
+                    setNewMenu((s) => ({ ...s, price: e.target.value }))
+                  }
+                />
+
+                <button
+                  onClick={handleCreateMenu}
+                  className="w-30 px-3 py-1.5 text-md rounded bg-[#00efef] text-white whitespace-nowrap font-bold flex-2"
+                >
+                  메뉴 추가
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* 식당 선택 + 메뉴-관계 등록 */}
+        {addingIndex === 3 && (
+          <div className="rounded-xl p-3 space-y-3 bg-white shadow-xl shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
+            <h2 className="text-sm font-semibold">식당에 메뉴 추가</h2>
+
+            <div className="flex flex-col gap-2 text-sm">
+              <select
+                className="rounded px-2 font-bold py-1.5 w-full text-sm text-black border border-gray-300"
+                value={selectedRestaurantId ?? ""}
+                onChange={(e) =>
+                  setSelectedRestaurantId(
+                    e.target.value ? Number(e.target.value) : null
+                  )
+                }
+              >
+                <option value="">식당 선택</option>
+                {restaurants.map((r) => (
+                  <option key={r.id} value={r.id}>
+                    {r.name}
+                  </option>
+                ))}
+              </select>
+
+              {selectedRestaurantId && (
+                <>
+                  <div className="space-y-2  rounded px-2 py-1.5 w-full border border-gray-300 max-h-48 overflow-auto">
+                    <div className="text-xs text-gray-500 mb-1">
+                      선택된 식당의 기존 메뉴
+                    </div>
+                    {relationsPreview.length === 0 && (
+                      <div className="text-xs text-gray-400">
+                        아직 등록된 메뉴가 없습니다.
+                      </div>
+                    )}
+                    {relationsPreview.map((txt, i) => (
+                      <div key={i} className="text-xs">
+                        • {txt}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* 여러 개 관계 입력 행 */}
+                  <div className="space-y-3">
+                    {relationRows.map((row, idx) => (
+                      <div
+                        key={idx}
+                        className="flex gap-2 items-center text-xs"
+                      >
+                        <div className="flex gap-2 flex-col">
+                          <div className="flex gap-2 flex-row">
+                            <select
+                              className="rounded px-2 py-1 text-black border border-gray-300 flex-[2]"
+                              value={row.menuId ?? ""}
                               onChange={(e) =>
                                 handleRelationRowChange(idx, {
-                                  isInfinit: e.target.checked,
+                                  menuId: e.target.value
+                                    ? Number(e.target.value)
+                                    : null,
+                                })
+                              }
+                            >
+                              <option value="">메뉴 선택</option>
+                              {menus.map((m) => (
+                                <option key={m.id} value={m.id}>
+                                  {m.name}
+                                </option>
+                              ))}
+                            </select>
+                            <input
+                              type="number"
+                              className="rounded px-2 py-1 text-black border border-gray-300 flex-1"
+                              placeholder="가격"
+                              value={row.price ?? ""}
+                              onChange={(e) =>
+                                handleRelationRowChange(idx, {
+                                  price: e.target.value
+                                    ? Number(e.target.value)
+                                    : null,
                                 })
                               }
                             />
-                            <span>무한리필</span>
-                          </label>
-                          <input
-                            className="rounded px-2 py-1 text-black border border-gray-300 flex-[2]"
-                            placeholder="메모 (선택)"
-                            value={row.note}
-                            onChange={(e) =>
-                              handleRelationRowChange(idx, {
-                                note: e.target.value,
-                              })
-                            }
-                          />
+                          </div>
+                          <div className="flex gap-2 flex-row">
+                            <label className="flex items-center gap-1 flex-1 ml-8">
+                              <input
+                                type="checkbox"
+                                checked={!!row.isInfinit}
+                                onChange={(e) =>
+                                  handleRelationRowChange(idx, {
+                                    isInfinit: e.target.checked,
+                                  })
+                                }
+                              />
+                              <span>무한리필</span>
+                            </label>
+                            <input
+                              className="rounded px-2 py-1 text-black border border-gray-300 flex-[2]"
+                              placeholder="메모 (선택)"
+                              value={row.note}
+                              onChange={(e) =>
+                                handleRelationRowChange(idx, {
+                                  note: e.target.value,
+                                })
+                              }
+                            />
+                          </div>
                         </div>
+                        <button
+                          type="button"
+                          className="px-2 py-1 rounded ml-auto"
+                          onClick={() => handleRemoveRelationRow(idx)}
+                          disabled={relationRows.length === 1}
+                        >
+                          <CircleMinus strokeWidth={2} color="#ff853eff" />
+                        </button>
                       </div>
+                    ))}
+
+                    <div className="flex justify-between items-center mt-2">
                       <button
                         type="button"
-                        className="px-2 py-1 rounded ml-auto"
-                        onClick={() => handleRemoveRelationRow(idx)}
-                        disabled={relationRows.length === 1}
+                        className="px-2 py-1 rounded text-md"
+                        onClick={handleAddRelationRow}
                       >
-                        <CircleMinus strokeWidth={2} color="#ff853eff"/>
+                        <CirclePlus strokeWidth={2} color="#00efef" />
+                      </button>
+                      <button
+                        type="button"
+                        className="px-3 py-1 rounded text-sm bg-[#00efef] text-white whitespace-nowrap font-semibold"
+                        onClick={handleSaveRelations}
+                      >
+                        관계 저장
                       </button>
                     </div>
-                  ))}
-
-                  <div className="flex justify-between items-center mt-2">
-                    <button
-                      type="button"
-                      className="px-2 py-1 rounded text-md"
-                      onClick={handleAddRelationRow}
-                    >
-                      <CirclePlus strokeWidth={2} color="#00efef"/>
-                    </button>
-                    <button
-                      type="button"
-                      className="px-3 py-1 rounded text-sm bg-[#00efef] text-white whitespace-nowrap font-semibold"
-                      onClick={handleSaveRelations}
-                    >
-                      관계 저장
-                    </button>
                   </div>
-                </div>
-              </>
-            )}
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      )}
-
+        )}
+      </div>
       {/* 하단에 전체 리스트 간단 프리뷰 */}
-      <div className="flex grid-cols-2 gap-3 text-black">
-        <div className="space-y-2 flex-3">
+      <div className="flex flex-col gap-3 text-black pt-16">
+        <div className="space-y-2 flex-1">
           <div className="text-xs font-semibold">전체 식당</div>
           <div className="space-y-2 max-h-64 overflow-auto">
             {restaurants.map((r) => (
@@ -533,7 +544,7 @@ export function ManageTab({
             ))}
           </div>
         </div>
-        <div className="space-y-2 flex-2">
+        <div className="space-y-2 flex-1">
           <div className="text-xs font-semibold">전체 메뉴</div>
           <div className="space-y-2 max-h-64 overflow-auto">
             {menus.map((m) => (
