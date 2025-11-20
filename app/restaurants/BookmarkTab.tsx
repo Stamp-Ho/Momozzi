@@ -314,7 +314,7 @@ export function BookmarkTab({
 
       {/* 컨텐츠 */}
       {viewMode === "menu" && (
-        <div className="space-y-2 h-121 pb-4 overflow-y-auto">
+        <div className="space-y-2 h-121 pb-18 overflow-y-auto">
           {loadingMenus ? (
             <div className="text-xs">불러오는 중...</div>
           ) : menus.length === 0 ? (

@@ -447,10 +447,10 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
               </div>
             )}
             <div
-              className="space-y-2 overflow-y-auto pb-13"
+              className="space-y-2 overflow-y-auto pb-18"
               style={{
                 height:
-                  490 - (isAddingRelation ? 104 : 0) - (isEditing ? 28 : 0),
+                  445 - (isAddingRelation ? 104 : 0) - (isEditing ? 28 : 0),
               }}
             >
               {restaurants.map((r) => (
