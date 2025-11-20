@@ -262,7 +262,7 @@ export function MenuRecommendTab({
       {menus.length > 0 && (
         <div className="space-y-2">
           <h3 className="text-xs text-gray-500">
-            필터에 해당하는 메뉴 목록 ({menus.length}개)
+            검색 결과 ({menus.length}개)
           </h3>
           <div className="space-y-2 max-h-97 overflow-auto pb-18">
             {menus.map((m) => (
