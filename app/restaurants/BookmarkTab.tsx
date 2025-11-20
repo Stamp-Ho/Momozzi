@@ -228,7 +228,7 @@ export function BookmarkTab({
                   <div className="relative h-1 bg-gray-200 rounded">
                     {/* 선택된 범위를 보여주는 하이라이트 바 */}
                     <div
-                      className="absolute h-1 bg-black rounded"
+                      className="absolute h-1 bg-[#00efef] rounded"
                       style={{
                         left: `${
                           ((effectiveMin - PRICE_MIN) /
@@ -262,13 +262,13 @@ export function BookmarkTab({
                             [&::-webkit-slider-thumb]:h-4
                             [&::-webkit-slider-thumb]:w-4
                             [&::-webkit-slider-thumb]:rounded-full
-                            [&::-webkit-slider-thumb]:bg-black
+                            [&::-webkit-slider-thumb]:bg-[#00efef]
                             [&::-moz-range-thumb]:pointer-events-auto
                             [&::-moz-range-thumb]:appearance-none
                             [&::-moz-range-thumb]:h-4
                             [&::-moz-range-thumb]:w-4
                             [&::-moz-range-thumb]:rounded-full
-                            [&::-moz-range-thumb]:bg-red
+                            [&::-moz-range-thumb]:bg-[#00efef]
                           "
                     />
 
@@ -291,11 +291,11 @@ export function BookmarkTab({
                             [&::-webkit-slider-thumb]:h-4
                             [&::-webkit-slider-thumb]:w-4
                             [&::-webkit-slider-thumb]:rounded-full
-                            [&::-webkit-slider-thumb]:bg-black
+                            [&::-webkit-slider-thumb]:bg-[#00efef]
                             [&::-moz-range-thumb]:h-4
                             [&::-moz-range-thumb]:w-4
                             [&::-moz-range-thumb]:rounded-full
-                            [&::-moz-range-thumb]:bg-black
+                            [&::-moz-range-thumb]:bg-[#00efef]
                           "
                     />
                   </div>

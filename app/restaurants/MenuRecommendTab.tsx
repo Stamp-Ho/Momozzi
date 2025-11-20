@@ -105,7 +105,7 @@ export function MenuRecommendTab({
       <div className="rounded-xl p-3 space-y-3 bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
         <div className="flex gap-2">
           <div className="flex-1">
-            <label className="block text-xs text-black mb-1 font-bold">
+            <label className="block text-xs text-black mb-1 font-semibold">
               음식 종류
             </label>
             <select
@@ -129,7 +129,7 @@ export function MenuRecommendTab({
           </div>
 
           <div className="flex-1">
-            <label className="block text-xs text-black mb-1 font-bold">
+            <label className="block text-xs text-black mb-1 font-semibold">
               식사 타입
             </label>
             <select
@@ -152,7 +152,7 @@ export function MenuRecommendTab({
         </div>
         <div className="flex gap-2 items-end">
           <div className="flex-1">
-            <label className="block text-xs mb-2 font-bold text-black">
+            <label className="block text-xs mb-2 font-semibold text-black">
               가격 범위
             </label>
 
@@ -161,7 +161,7 @@ export function MenuRecommendTab({
               <div className="relative h-1 bg-gray-200 rounded">
                 {/* 선택된 범위를 보여주는 하이라이트 바 */}
                 <div
-                  className="absolute h-1 bg-black rounded"
+                  className="absolute h-1 bg-[#00efef] rounded"
                   style={{
                     left: `${
                       ((effectiveMin - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) *
@@ -191,13 +191,13 @@ export function MenuRecommendTab({
                     [&::-webkit-slider-thumb]:h-4
                     [&::-webkit-slider-thumb]:w-4
                     [&::-webkit-slider-thumb]:rounded-full
-                    [&::-webkit-slider-thumb]:bg-black
+                    [&::-webkit-slider-thumb]:bg-[#00efef]
                     [&::-moz-range-thumb]:pointer-events-auto
                     [&::-moz-range-thumb]:appearance-none
                     [&::-moz-range-thumb]:h-4
                     [&::-moz-range-thumb]:w-4
                     [&::-moz-range-thumb]:rounded-full
-                    [&::-moz-range-thumb]:bg-red
+                    [&::-moz-range-thumb]:bg-[#00efef]
                   "
                 />
 
@@ -218,11 +218,11 @@ export function MenuRecommendTab({
                     [&::-webkit-slider-thumb]:h-4
                     [&::-webkit-slider-thumb]:w-4
                     [&::-webkit-slider-thumb]:rounded-full
-                    [&::-webkit-slider-thumb]:bg-black
+                    [&::-webkit-slider-thumb]:bg-[#00efef]
                     [&::-moz-range-thumb]:h-4
                     [&::-moz-range-thumb]:w-4
                     [&::-moz-range-thumb]:rounded-full
-                    [&::-moz-range-thumb]:bg-black
+                    [&::-moz-range-thumb]:bg-[#00efef]
                   "
                 />
               </div>

@@ -204,7 +204,7 @@ export function ManageTab({
 
   return (
     <section className="space-y-4 ">
-      <div className="fixed top-14 left-0 right-0 px-4 z-10 space-y-3">
+      <div className="absolute top-14 left-0 right-0 px-4 z-10 space-y-3">
         <div className="flex gap-3">
           <button
             className={`rounded-xl p-3 flex-1 font-bold text-black shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5 ${

@@ -217,7 +217,7 @@ export function RestaurantDetailPanel({
             {restaurant.outerMapUrl && (
               <button
                 onClick={handleOpenMap}
-                className="text-lg px-3 py-1.5 rounded-lg shadow-lg shadow-[#00efef33]  bg-[#00efef] text-white  whitespace-nowrap font-semibold"
+                className="text-md px-3.25 py-1.75 rounded-lg shadow-lg shadow-[#00efef33]  bg-[#00efef] text-white  whitespace-nowrap font-semibold"
               >
                 지도
               </button>
@@ -345,7 +345,7 @@ export function RestaurantDetailPanel({
                       currentRestaurant.closeTime?.slice(0, 5) ?? "마감 시간"
                     )}
                   </div>
-                  <div className="flex flex-row gap-1 items-center">
+                  <div className="flex flex-row gap-1 items-center relative">
                     평점:
                     {isEditing && (
                       <input
@@ -370,7 +370,7 @@ export function RestaurantDetailPanel({
                     )}{" "}
                     {restaurant.rating != null && (
                       <div
-                        className={`fixed ${
+                        className={`absolute ${
                           isEditing ? "ml-19.25" : "ml-8.5"
                         } flex flex-row gap-0.5  z-40`}
                       >
@@ -394,7 +394,7 @@ export function RestaurantDetailPanel({
                       </div>
                     )}
                     <div
-                      className={`fixed ${
+                      className={`absolute ${
                         isEditing ? "ml-19.25" : "ml-8.5"
                       } flex flex-row gap-0.5  z-30`}
                     >
@@ -534,7 +534,7 @@ export function RestaurantDetailPanel({
               className="space-y-2 overflow-y-auto pb-18"
               style={{
                 height:
-                  440 - (isAddingRelation ? 104 : 0) - (isEditing ? 64 : 0),
+                  420 - (isAddingRelation ? 104 : 0) - (isEditing ? 64 : 0),
               }}
             >
               {menuRelations.map(({ menu, relation }) => (
@@ -587,6 +587,14 @@ export function RestaurantDetailPanel({
           >
             닫기
           </button>
+          {restaurant.outerMapUrl && (
+            <button
+              onClick={handleOpenMap}
+              className="text-md px-8 py-1.5 rounded-xl shadow-lg shadow-[#00efef33]  bg-[#00efef] text-white  whitespace-nowrap font-semibold"
+            >
+              지도
+            </button>
+          )}
         </div>
       </div>
     </div>

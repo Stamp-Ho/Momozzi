@@ -450,7 +450,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
               className="space-y-2 overflow-y-auto pb-18"
               style={{
                 height:
-                  440 - (isAddingRelation ? 104 : 0) - (isEditing ? 28 : 0),
+                  420 - (isAddingRelation ? 104 : 0) - (isEditing ? 28 : 0),
               }}
             >
               {restaurants.map((r) => (
