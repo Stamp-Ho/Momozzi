@@ -546,7 +546,7 @@ export function ManageTab({
         </div>
         <div className="space-y-2 flex-1">
           <div className="text-xs font-semibold">전체 메뉴</div>
-          <div className="space-y-2 max-h-64 overflow-auto">
+          <div className="space-y-2 max-h-64 overflow-auto pb-4">
             {menus.map((m) => (
               <MenuCard key={m.id} menu={m} onSelect={onSelectMenu} />
             ))}
