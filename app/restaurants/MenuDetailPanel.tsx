@@ -4,11 +4,22 @@
 import { useEffect, useState } from "react";
 import type { Menu, Restaurant } from "@/types/db";
 import { fetchRestaurantsForMenu, createRelations } from "@/api/menu/relations";
-import { fetchAllRestaurants, updateRestaurantBookmark } from "@/api/menu/restaurants";
+import {
+  fetchAllRestaurants,
+  updateRestaurantBookmark,
+} from "@/api/menu/restaurants";
 import { updateMenu, updateMenuBookmark } from "@/api/menu/menus";
 import { CUISINE_STYLES, MAIN_INGREDIENTS, MEAL_TYPES } from "@/types/enums";
 import { RestaurantCard } from "./RestaurantCard";
-import { Bookmark, BookmarkCheck } from "lucide-react";
+import {
+  Bookmark,
+  BookmarkCheck,
+  SquarePen,
+  Save,
+  PencilOff,
+  Pencil,
+  CirclePlus,
+} from "lucide-react";
 
 type Props = {
   menu: Menu;
@@ -27,10 +38,11 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [allRestaurants, setAllRestaurants] = useState<Restaurant[]>([]);
   const [loadingRelations, setLoadingRelations] = useState(false);
-  const [loadingAllRestaurants, setLoadingAllRestaurants] = useState(false);
+  const [loadingAllRestaurants, setLoadingAllRestaurants] = useState(true);
 
   const [currentMenu, setCurrentMenu] = useState<Menu>(menu);
   const [isEditing, setIsEditing] = useState(false);
+  const [isAddingRelation, setIsAddingRelation] = useState(false);
   const [savingMenu, setSavingMenu] = useState(false);
 
   const [menuForm, setMenuForm] = useState({
@@ -64,9 +76,11 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
   }, [menu.id]);
 
   useEffect(() => {
-    if (!isEditing) return;
-    const loadAllRestaurants = async () => {
+    if (!isAddingRelation) {
       setLoadingAllRestaurants(true);
+      return;
+    }
+    const loadAllRestaurants = async () => {
       try {
         const data = await fetchAllRestaurants();
         setAllRestaurants(data);
@@ -75,7 +89,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
       }
     };
     void loadAllRestaurants();
-  }, [isEditing]);
+  }, [isAddingRelation]);
   const handleSaveMenu = async () => {
     setSavingMenu(true);
     try {
@@ -147,15 +161,15 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
   };
   const handleToggleMenuBookmark = async () => {
     const current = menuForm.bookmark ?? false;
-    setMenuForm((prev) => ({...prev, bookmark: !current}));
-    setCurrentMenu((prev) => ({...prev, bookmark: !current}));
+    setMenuForm((prev) => ({ ...prev, bookmark: !current }));
+    setCurrentMenu((prev) => ({ ...prev, bookmark: !current }));
     try {
       await updateMenuBookmark(menu.id, !current);
     } catch {
-      setMenuForm((prev) => ({...prev, bookmark: current}));
-      setCurrentMenu((prev) => ({...prev, bookmark: current}));
+      setMenuForm((prev) => ({ ...prev, bookmark: current }));
+      setCurrentMenu((prev) => ({ ...prev, bookmark: current }));
     }
-  }
+  };
   return (
     <div className="fixed inset-0 bg-black/30 flex justify-end z-50">
       <div className="w-full max-w-md h-full bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] shadow-xl flex flex-col">
@@ -165,21 +179,16 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
             <div className="text-sm text-gray-500">메뉴 상세</div>
             <div className="text-lg font-semibold">{currentMenu.name}</div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex mr-2">
             <button
-              onClick={() => setIsEditing((prev) => !prev)}
-              className="text-xs px-2 py-1 border rounded"
+              onClick={handleToggleMenuBookmark}
+              className="text-xl shrink-0"
             >
-              {isEditing ? "수정 닫기" : "수정하기"}
-            </button>
-            
-            <button onClick={handleToggleMenuBookmark} className="text-xl shrink-0">
               {currentMenu.bookmark ? (
-                <BookmarkCheck strokeWidth={2.5} color="#ff853eff" />
-                ) : (
-                <Bookmark strokeWidth={2} strokeOpacity={0.25} />
-                )
-              }
+                <BookmarkCheck strokeWidth={2.5} color="#ff853eff" size={32} />
+              ) : (
+                <Bookmark strokeWidth={2} strokeOpacity={0.4} size={32} />
+              )}
             </button>
           </div>
         </div>
@@ -188,140 +197,253 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
         <div className="p-4 space-y-4 overflow-auto text-sm">
           {/* 기본 정보 (읽기 전용 뷰) */}
           <div className="space-y-1">
-            <div className="text-xs text-gray-500">기본 정보</div>
-            <div className="border rounded p-2 space-y-1">
-              <div>이름: {currentMenu.name}</div>
-              <div>
-                종류: {currentMenu.cuisine_style ?? "기록 없음"} / 식사:{" "}
-                {currentMenu.meal_type ?? "기록 없음"}
+            <div className="text-xs text-gray-500 ml-3">
+              {isEditing ? "정보 수정" : "기본 정보"}
+            </div>
+            <div className="border rounded-lg p-2 pl-3 space-y-1  bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
+              <div className="flex flex-row">
+                <div className="flex flex-col space-y-1">
+                  <div>
+                    이름:{" "}
+                    {isEditing ? (
+                      <input
+                        className="border rounded px-2 py-0.75 w-48 border-gray-400"
+                        placeholder="메뉴 이름"
+                        value={menuForm.name}
+                        onChange={(e) =>
+                          setMenuForm((s) => ({ ...s, name: e.target.value }))
+                        }
+                      />
+                    ) : (
+                      currentMenu.name
+                    )}
+                  </div>
+                  <div>
+                    종류:{" "}
+                    {isEditing ? (
+                      <select
+                        className="border rounded px-1 py-0.75 flex-1 border-gray-400"
+                        value={menuForm.cuisine_style}
+                        onChange={(e) =>
+                          setMenuForm((s) => ({
+                            ...s,
+                            cuisine_style: e.target.value,
+                          }))
+                        }
+                      >
+                        <option value="">음식 종류</option>
+                        {CUISINE_STYLES.map((s) => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      currentMenu.cuisine_style ?? "기록 없음"
+                    )}
+                    {" / "}
+                    {isEditing ? (
+                      <select
+                        className="border rounded px-1 py-0.75 flex-1 border-gray-400"
+                        value={menuForm.meal_type}
+                        onChange={(e) =>
+                          setMenuForm((s) => ({
+                            ...s,
+                            meal_type: e.target.value,
+                          }))
+                        }
+                      >
+                        <option value="">식사 타입</option>
+                        {MEAL_TYPES.map((s) => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      currentMenu.meal_type ?? "기록 없음"
+                    )}
+                  </div>
+                </div>
+
+                <button
+                  className={`ml-auto px-2 ${isEditing ? "mb-5" : "mb-1.5"}`}
+                  onClick={() => setIsEditing((prev) => !prev)}
+                >
+                  {isEditing ? (
+                    <PencilOff strokeWidth={2} color="#ff853eff" size={24} />
+                  ) : (
+                    <Pencil strokeWidth={2} strokeOpacity={0.4} size={24} />
+                  )}
+                </button>
               </div>
-              <div>주 재료: {currentMenu.main_ingredient ?? "기록 없음"}</div>
-              <div>
-                기준 가격:{" "}
-                {currentMenu.price != null
-                  ? `${currentMenu.price.toLocaleString()}원`
-                  : "기록 없음"}
-              </div>
-              <div>북마크: {currentMenu.bookmark ? "⭐" : "없음"}</div>
-              <div className="text-[10px] text-gray-400">
-                생성일: {new Date(currentMenu.created_at).toLocaleString()}
+              <div className="flex flex-row">
+                <div className="flex flex-col space-y-1">
+                  <div>
+                    주 재료:{" "}
+                    {isEditing ? (
+                      <select
+                        className="border rounded px-1 py-0.75 flex-1 border-gray-400"
+                        value={menuForm.main_ingredient}
+                        onChange={(e) =>
+                          setMenuForm((s) => ({
+                            ...s,
+                            main_ingredient: e.target.value,
+                          }))
+                        }
+                      >
+                        <option value="">주 재료</option>
+                        {MAIN_INGREDIENTS.map((s) => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      currentMenu.main_ingredient ?? "기록 없음"
+                    )}
+                  </div>
+                  <div>
+                    기준 가격:{" "}
+                    {isEditing ? (
+                      <input
+                        type="number"
+                        className="border rounded px-2 py-0.75 flex-1 w-17 border-gray-400"
+                        placeholder="기준 가격"
+                        value={menuForm.price}
+                        onChange={(e) =>
+                          setMenuForm((s) => ({
+                            ...s,
+                            price: e.target.value,
+                          }))
+                        }
+                      />
+                    ) : currentMenu.price != null ? (
+                      `${currentMenu.price.toLocaleString()}원`
+                    ) : (
+                      "기록 없음"
+                    )}
+                  </div>
+                </div>
+                {isEditing && (
+                  <button
+                    className="ml-auto px-2 mt-5"
+                    onClick={handleSaveMenu}
+                    disabled={savingMenu}
+                  >
+                    <Save strokeWidth={2} color="#00efef" size={24} />
+                  </button>
+                )}
               </div>
             </div>
           </div>
 
-          {/* 수정 모드: 메뉴 정보 수정 */}
-          {isEditing && (
-            <div className="space-y-2 border rounded p-3">
-              <div className="text-xs text-gray-500 mb-1">메뉴 정보 수정</div>
-              <div className="flex flex-col gap-2 text-xs">
-                <input
-                  className="border rounded px-2 py-1"
-                  placeholder="메뉴 이름"
-                  value={menuForm.name}
-                  onChange={(e) =>
-                    setMenuForm((s) => ({ ...s, name: e.target.value }))
-                  }
-                />
-                <div className="flex gap-2">
-                  <select
-                    className="border rounded px-2 py-1 flex-1"
-                    value={menuForm.cuisine_style}
-                    onChange={(e) =>
-                      setMenuForm((s) => ({
-                        ...s,
-                        cuisine_style: e.target.value,
-                      }))
-                    }
-                  >
-                    <option value="">음식 종류</option>
-                    {CUISINE_STYLES.map((s) => (
-                      <option key={s} value={s}>
-                        {s}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    className="border rounded px-2 py-1 flex-1"
-                    value={menuForm.main_ingredient}
-                    onChange={(e) =>
-                      setMenuForm((s) => ({
-                        ...s,
-                        main_ingredient: e.target.value,
-                      }))
-                    }
-                  >
-                    <option value="">주 재료</option>
-                    {MAIN_INGREDIENTS.map((s) => (
-                      <option key={s} value={s}>
-                        {s}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    className="border rounded px-2 py-1 flex-1"
-                    value={menuForm.meal_type}
-                    onChange={(e) =>
-                      setMenuForm((s) => ({
-                        ...s,
-                        meal_type: e.target.value,
-                      }))
-                    }
-                  >
-                    <option value="">식사 타입</option>
-                    {MEAL_TYPES.map((s) => (
-                      <option key={s} value={s}>
-                        {s}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex gap-2 items-center">
-                  <input
-                    type="number"
-                    className="border rounded px-2 py-1 flex-1"
-                    placeholder="기준 가격"
-                    value={menuForm.price}
-                    onChange={(e) =>
-                      setMenuForm((s) => ({
-                        ...s,
-                        price: e.target.value,
-                      }))
-                    }
-                  />
-                  <label className="flex items-center gap-1">
-                    <input
-                      type="checkbox"
-                      checked={menuForm.bookmark}
-                      onChange={(e) =>
-                        setMenuForm((s) => ({
-                          ...s,
-                          bookmark: e.target.checked,
-                        }))
-                      }
-                    />
-                    <span>북마크</span>
-                  </label>
-                </div>
-
-                <button
-                  onClick={handleSaveMenu}
-                  className="self-end px-3 py-1 rounded bg-black text-white"
-                  disabled={savingMenu}
-                >
-                  {savingMenu ? "저장 중..." : "메뉴 정보 저장"}
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* 이 메뉴를 먹을 수 있는 식당들 */}
           <div className="space-y-2">
-            <div className="text-xs text-gray-500">
-              이 메뉴를 먹을 수 있는 식당
+            <div className="text-xs text-gray-500 ml-3">
+              이 메뉴가 있는 식당
             </div>
+            {isAddingRelation || (
+              <button
+                className="flex flex-row gap-2 w-full justify-center py-2 rounded-lg font-bold bg-white shadow-sm shadow-[#00cccc33] border-[#00eeee44] border border-1.5"
+                onClick={() => setIsAddingRelation(true)}
+              >
+                <CirclePlus color="#00efef" size={20} />
+                식당 추가
+              </button>
+            )}
+            {/* 수정 모드: relation 추가 */}
+            {isAddingRelation && (
+              <div className=" rounded-lg p-2 pl-3 space-y-1  bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
+                <div className="text-xs text-gray-500 mb-1">
+                  이 메뉴를 제공하는 식당 추가
+                </div>
+                {loadingAllRestaurants && (
+                  <div className="text-xs">식당 목록 불러오는 중...</div>
+                )}
+                {!loadingAllRestaurants && (
+                  <div className="flex flex-col gap-1.5 text-sm">
+                    <div className="flex flex-row gap-4 items-center">
+                      <select
+                        className="border rounded px-1.5 py-0.75 flex-3 border-gray-400"
+                        value={relationForm.restaurantId ?? ""}
+                        onChange={(e) =>
+                          setRelationForm((s) => ({
+                            ...s,
+                            restaurantId: e.target.value
+                              ? Number(e.target.value)
+                              : null,
+                          }))
+                        }
+                      >
+                        <option value="">식당 선택</option>
+                        {allRestaurants.map((r) => (
+                          <option key={r.id} value={r.id}>
+                            {r.name}
+                          </option>
+                        ))}
+                      </select>
+                      <input
+                        type="number"
+                        className="mr-1 border rounded px-2 py-0.75 w-10 flex-1 border-gray-400"
+                        placeholder="가격 (선택)"
+                        value={relationForm.price}
+                        onChange={(e) =>
+                          setRelationForm((s) => ({
+                            ...s,
+                            price: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <div className="flex gap-2 items-center">
+                      <input
+                        className="border rounded px-2.5 py-0.75 flex-1 border-gray-400 mr-3.5"
+                        placeholder="메모 (선택)"
+                        value={relationForm.note}
+                        onChange={(e) =>
+                          setRelationForm((s) => ({
+                            ...s,
+                            note: e.target.value,
+                          }))
+                        }
+                      />
+                      <label className="flex items-center gap-1 mr-6">
+                        <input
+                          type="checkbox"
+                          checked={relationForm.isInfinit}
+                          onChange={(e) =>
+                            setRelationForm((s) => ({
+                              ...s,
+                              isInfinit: e.target.checked,
+                            }))
+                          }
+                        />
+                        <span>무한리필</span>
+                      </label>
+                    </div>
+                    <div className="flex flex-row">
+                      <button
+                        onClick={() => setIsAddingRelation(false)}
+                        className="self-end mt-1 px-3 py-1.5 font-bold rounded-md bg-[#ff853eff] text-white whitespace-nowrap"
+                      >
+                        그만 추가하기
+                      </button>
+                      <button
+                        onClick={handleAddRelation}
+                        className="self-end ml-auto mt-1 px-3 py-1.5 font-bold rounded-md bg-[#00efef] text-white whitespace-nowrap"
+                        disabled={savingRelation}
+                      >
+                        {savingRelation ? "추가 중..." : "식당에 이 메뉴 추가"}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
             {loadingRelations && <div className="text-xs">불러오는 중...</div>}
             {!loadingRelations && restaurants.length === 0 && (
-              <div className="text-xs text-gray-500">
+              <div className="text-xs text-gray-500 ml-3">
                 아직 이 메뉴와 연결된 식당이 없어요.
               </div>
             )}
@@ -336,95 +458,15 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
               ))}
             </div>
           </div>
-
-          {/* 수정 모드: relation 추가 */}
-          {isEditing && (
-            <div className="space-y-2 border rounded p-3">
-              <div className="text-xs text-gray-500 mb-1">
-                이 메뉴를 제공하는 식당 추가
-              </div>
-              {loadingAllRestaurants && (
-                <div className="text-xs">식당 목록 불러오는 중...</div>
-              )}
-              {!loadingAllRestaurants && (
-                <div className="flex flex-col gap-2 text-xs">
-                  <select
-                    className="border rounded px-2 py-1"
-                    value={relationForm.restaurantId ?? ""}
-                    onChange={(e) =>
-                      setRelationForm((s) => ({
-                        ...s,
-                        restaurantId: e.target.value
-                          ? Number(e.target.value)
-                          : null,
-                      }))
-                    }
-                  >
-                    <option value="">식당 선택</option>
-                    {allRestaurants.map((r) => (
-                      <option key={r.id} value={r.id}>
-                        {r.name}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="flex gap-2 items-center">
-                    <input
-                      type="number"
-                      className="border rounded px-2 py-1 flex-1"
-                      placeholder="가격 (선택)"
-                      value={relationForm.price}
-                      onChange={(e) =>
-                        setRelationForm((s) => ({
-                          ...s,
-                          price: e.target.value,
-                        }))
-                      }
-                    />
-                    <label className="flex items-center gap-1">
-                      <input
-                        type="checkbox"
-                        checked={relationForm.isInfinit}
-                        onChange={(e) =>
-                          setRelationForm((s) => ({
-                            ...s,
-                            isInfinit: e.target.checked,
-                          }))
-                        }
-                      />
-                      <span>무한리필</span>
-                    </label>
-                  </div>
-                  <input
-                    className="border rounded px-2 py-1"
-                    placeholder="메모 (선택)"
-                    value={relationForm.note}
-                    onChange={(e) =>
-                      setRelationForm((s) => ({
-                        ...s,
-                        note: e.target.value,
-                      }))
-                    }
-                  />
-                  <button
-                    onClick={handleAddRelation}
-                    className="self-end px-3 py-1 rounded bg-black text-white"
-                    disabled={savingRelation}
-                  >
-                    {savingRelation ? "추가 중..." : "식당 관계 추가"}
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
         </div>
-              <div className="fixed bottom-0 left-0 w-full flex gap-2 px-6 py-2">
-        <button
-              onClick={onClose}
-              className="text-md text-white font-semibold w-full px-4 py-2 bg-[#ff853eff]  rounded-xl shadow-lg shadow-[#ff853e53]"
-            >
-              닫기
-            </button>
-              </div>
+        <div className="fixed bottom-0 left-0 w-full flex gap-2 px-12 py-3">
+          <button
+            onClick={onClose}
+            className="text-md text-white font-semibold w-full px-4 py-2.5 bg-[#ff853eff]  rounded-xl shadow-lg shadow-[#ff853e53]"
+          >
+            닫기
+          </button>
+        </div>
       </div>
     </div>
   );
