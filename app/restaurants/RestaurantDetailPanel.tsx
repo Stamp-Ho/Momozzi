@@ -13,7 +13,6 @@ import {
   updateRestaurant,
   updateRestaurantBookmark,
 } from "@/api/menu/restaurants";
-import { MenuCard } from "./MenuCard";
 import {
   Bookmark,
   BookmarkCheck,
@@ -21,16 +20,16 @@ import {
   PencilOff,
   Pencil,
   CirclePlus,
-  Star,
-  StarHalf,
   Trash,
 } from "lucide-react";
 import { MEAL_TYPES } from "@/types/enums";
+import { StarRatingSlider } from "./StarRatingSlider";
 
 type Props = {
   restaurant: Restaurant;
   onClose: () => void;
   onSelectMenu?: (menu: Menu) => void;
+  setEdited: (next: boolean) => void;
 };
 
 type RelationForm = {
@@ -52,6 +51,7 @@ export function RestaurantDetailPanel({
   restaurant,
   onClose,
   onSelectMenu,
+  setEdited,
 }: Props) {
   const [currentRestaurant, setCurrentRestaurant] =
     useState<Restaurant>(restaurant);
@@ -169,6 +169,7 @@ export function RestaurantDetailPanel({
       });
       setCurrentRestaurant(updated);
       setIsEditing(false);
+      setEdited(true);
     } catch (e) {
       console.error(e);
     } finally {
@@ -259,7 +260,7 @@ export function RestaurantDetailPanel({
             <div className="border rounded-lg p-2 pl-3 space-y-1  bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
               <div className="flex flex-row">
                 <div className="flex flex-col space-y-1">
-                  <div>
+                  <div className="font-semibold">
                     이름:{" "}
                     {isEditing ? (
                       <input
@@ -361,66 +362,28 @@ export function RestaurantDetailPanel({
                   </div>
                   <div className="flex flex-row gap-1 items-center relative">
                     평점:
-                    {isEditing && (
-                      <input
-                        type="number"
-                        className="border rounded px-2 py-0.75 w-9.5 border-gray-300"
-                        placeholder="0.0"
-                        step="0.5"
-                        min="0"
-                        max="5"
-                        value={Number(restaurantForm.rating).toString()}
-                        onChange={(e) => {
-                          var value = e.target.value;
-                          if (Number(value) > 5) return;
-                          if (Number(value) < 0) return;
-                          if (Number(value) % 0.5 !== 0) return;
-                          setRestaurantForm((s) => ({
-                            ...s,
-                            rating: Number(value),
-                          }));
-                        }}
-                      />
-                    )}{" "}
-                    {restaurant.rating != null && (
-                      <div
-                        className={`absolute ${
-                          isEditing ? "ml-19.25" : "ml-8.5"
-                        } flex flex-row gap-0.5  z-40`}
-                      >
-                        {[...Array(Math.floor(restaurantForm.rating))].map(
-                          (_, i) => (
-                            <Star
-                              key={i}
-                              size={16}
-                              strokeWidth={3}
-                              color="#ff853eff"
-                            />
-                          )
-                        )}
-                        {restaurantForm.rating % 1 >= 0.5 && (
-                          <StarHalf
-                            size={16}
-                            strokeWidth={3}
-                            color="#ff853eff"
-                          />
-                        )}
-                      </div>
-                    )}
-                    <div
-                      className={`absolute ${
-                        isEditing ? "ml-19.25" : "ml-8.5"
-                      } flex flex-row gap-0.5  z-30`}
-                    >
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          size={16}
-                          strokeWidth={1.5}
-                          color="hsla(0, 0%, 25%, 0.5)"
-                        />
-                      ))}
-                    </div>
+                    <StarRatingSlider
+                      size={16}
+                      value={
+                        isEditing
+                          ? restaurantForm.rating
+                          : currentRestaurant.rating
+                      }
+                      onChange={
+                        isEditing
+                          ? (value: number) =>
+                              setRestaurantForm({
+                                ...restaurantForm,
+                                rating: value,
+                              })
+                          : () => {}
+                      }
+                    />
+                    <label className="ml-0.5">
+                      {isEditing
+                        ? restaurantForm.rating
+                        : currentRestaurant.rating}
+                    </label>
                   </div>
                 </div>
                 {isEditing && (

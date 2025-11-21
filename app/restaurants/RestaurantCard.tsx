@@ -34,7 +34,7 @@ export function RestaurantCard({
   return (
     <div
       className="rounded-xl px-4 py-3 flex justify-between items-center gap-3 cursor-pointer hover:bg-gray-50
-                  bg-white shadow-sm shadow-[#00cccc33] border-[#00eeee44] border border-1.5"
+                  bg-white shadow-sm shadow-[#00cccc33] border-[#00eeee44] border border-1.5 relative mt-0.25"
       onClick={handleClick}
     >
       <div className="space-y-1">
@@ -59,25 +59,26 @@ export function RestaurantCard({
           </div>
         )}
       </div>
-      <div className="flex flex-row items-end gap-3 shrink-0 ">
-        {restaurant.outerMapUrl && onToggleBookmark && (
-          <button
-            onClick={handleOpenMap}
-            className="text-sm px-3 py-2 rounded-lg bg-[#00efef] text-white whitespace-nowrap font-bold"
-          >
-            지도
-          </button>
-        )}
-        {onToggleBookmark && (
-          <button onClick={handleToggle} className="mb-auto mt-auto">
-            {restaurant.bookmark ? (
-              <BookmarkCheck strokeWidth={2.5} color="#ff853eff" />
-            ) : (
-              <Bookmark strokeWidth={2} strokeOpacity={0.25} />
-            )}
-          </button>
-        )}
-      </div>
+      {onToggleBookmark && (
+        <button
+          onClick={handleToggle}
+          className="mb-auto mt-auto absolute px-3 -right-0 -top-1"
+        >
+          {restaurant.bookmark ? (
+            <BookmarkCheck size={28} strokeWidth={2.5} color="#ff853eff" />
+          ) : (
+            <Bookmark size={28} strokeWidth={2.25} strokeOpacity={0.25} />
+          )}
+        </button>
+      )}
+      {restaurant.outerMapUrl && onToggleBookmark && (
+        <button
+          onClick={handleOpenMap}
+          className="text-sm px-4 py-2 mt-6 rounded-lg bg-[#00efef] text-white whitespace-nowrap font-bold"
+        >
+          지도
+        </button>
+      )}
     </div>
   );
 }

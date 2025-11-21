@@ -2,11 +2,16 @@ import { Star } from "lucide-react";
 import { useRef, useState, useCallback } from "react";
 
 type StarRatingSliderProps = {
+  size: number;
   value?: number; // 0 ~ 5
   onChange?: (value: number) => void;
 };
 
-export function StarRatingSlider({ value, onChange }: StarRatingSliderProps) {
+export function StarRatingSlider({
+  size = 28,
+  value,
+  onChange,
+}: StarRatingSliderProps) {
   const [internalValue, setInternalValue] = useState(value ?? 0);
   const [dragging, setDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -48,12 +53,10 @@ export function StarRatingSlider({ value, onChange }: StarRatingSliderProps) {
     e.currentTarget.releasePointerCapture(e.pointerId);
   };
 
-  const starSize = 28;
-
   return (
     <div
       ref={containerRef}
-      className="inline-block relative text-3xl cursor-pointer select-none"
+      className="inline-block relative text-3xl cursor-pointer select-none touch-none"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
@@ -62,11 +65,11 @@ export function StarRatingSlider({ value, onChange }: StarRatingSliderProps) {
       <div className="flex items-center gap-2 flex-row">
         {/* 회색 별 5개 (배경) */}
         <div className="text-slate-300">
-          <div className="flex flex-row">
+          <div className="flex flex-row gap-0.25">
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
-                size={starSize}
+                size={size}
                 strokeWidth={1.5}
                 color="hsla(0, 0%, 25%, 0.5)"
               />
@@ -79,9 +82,9 @@ export function StarRatingSlider({ value, onChange }: StarRatingSliderProps) {
           className="absolute left-0 top-0 overflow-hidden"
           style={{ width: `${(current / 5) * 100}%` }}
         >
-          <div className="flex flex-row text-yellow-400 w-max shrink-0">
+          <div className="flex flex-row text-yellow-400 w-max shrink-0 gap-0.25">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} size={starSize} strokeWidth={3} color="#ff853eff" />
+              <Star key={i} size={size} strokeWidth={3} color="#ff853eff" />
             ))}
           </div>
         </div>

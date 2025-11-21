@@ -12,14 +12,14 @@ const PRICE_MAX = 50000;
 const PRICE_STEP = 2000;
 
 type Props = {
-  filter: MenuFilter;
-  onChangeFilter: (next: MenuFilter) => void;
+  menuFilter: MenuFilter;
+  onChangeMenuFilter: (next: MenuFilter) => void;
   onSelectMenu?: (menu: Menu) => void;
 };
 
 export function MenuRecommendTab({
-  filter,
-  onChangeFilter,
+  menuFilter,
+  onChangeMenuFilter,
   onSelectMenu,
 }: Props) {
   const [menus, setMenus] = useState<Menu[]>([]);
@@ -27,13 +27,13 @@ export function MenuRecommendTab({
   const [loading, setLoading] = useState(false);
 
   const handleFilterChange = (patch: Partial<MenuFilter>) => {
-    onChangeFilter({ ...filter, ...patch });
+    onChangeMenuFilter({ ...menuFilter, ...patch });
   };
 
   const handleRecommend = async () => {
     setLoading(true);
     try {
-      const data = await fetchMenusByFilter(filter);
+      const data = await fetchMenusByFilter(menuFilter);
       setMenus(data);
       if (data.length > 0) {
         const idx = Math.floor(Math.random() * data.length);
@@ -82,7 +82,7 @@ export function MenuRecommendTab({
   };
   // 🔽 가격 슬라이더용 핸들러 추가
   const handlePriceMinChange = (value: number) => {
-    const currentMax = filter.priceMax ?? PRICE_MAX;
+    const currentMax = menuFilter.priceMax ?? PRICE_MAX;
     const nextMin = Math.min(value, currentMax - 5000);
     handleFilterChange({
       priceMin: nextMin,
@@ -90,15 +90,15 @@ export function MenuRecommendTab({
   };
 
   const handlePriceMaxChange = (value: number) => {
-    const currentMin = filter.priceMin ?? PRICE_MIN;
+    const currentMin = menuFilter.priceMin ?? PRICE_MIN;
     const nextMax = Math.max(value, currentMin + 5000);
     handleFilterChange({
       priceMax: nextMax,
     });
   };
 
-  const effectiveMin = filter.priceMin ?? PRICE_MIN;
-  const effectiveMax = filter.priceMax ?? PRICE_MAX;
+  const effectiveMin = menuFilter.priceMin ?? PRICE_MIN;
+  const effectiveMax = menuFilter.priceMax ?? PRICE_MAX;
   return (
     <section className="space-y-4 text-black">
       {/* 필터 영역 */}
@@ -110,7 +110,7 @@ export function MenuRecommendTab({
             </label>
             <select
               className="rounded px-2 py-2 w-full text-sm text-black border border-gray-400"
-              value={filter.cuisine_style ?? ""}
+              value={menuFilter.cuisine_style ?? ""}
               onChange={(e) =>
                 handleFilterChange({
                   cuisine_style: (e.target.value || null) as any,
@@ -133,7 +133,7 @@ export function MenuRecommendTab({
             </label>
             <select
               className="rounded px-2 py-2 w-full text-sm text-black border border-gray-400"
-              value={filter.main_ingredient ?? ""}
+              value={menuFilter.main_ingredient ?? ""}
               onChange={(e) =>
                 handleFilterChange({
                   main_ingredient: (e.target.value || null) as any,
@@ -157,7 +157,7 @@ export function MenuRecommendTab({
             </label>
             <select
               className="rounded px-2 py-2 w-full text-sm text-black border border-gray-400"
-              value={filter.meal_type ?? ""}
+              value={menuFilter.meal_type ?? ""}
               onChange={(e) =>
                 handleFilterChange({
                   meal_type: (e.target.value || null) as any,

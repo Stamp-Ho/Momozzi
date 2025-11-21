@@ -23,7 +23,7 @@ export function MenuCard({ menu, onToggleBookmark, onSelect }: Props) {
   return (
     <div
       className="rounded-xl px-4 py-3 flex justify-between items-center gap-3 cursor-pointer hover:bg-gray-50
-                  bg-white shadow-sm shadow-[#00cccc33] border-[#00eeee44] border border-1.5"
+                  bg-white shadow-sm shadow-[#00cccc33] border-[#00eeee44] border border-1.5 mt-0.25"
       onClick={handleClick}
     >
       <div className="space-y-1">
@@ -40,11 +40,14 @@ export function MenuCard({ menu, onToggleBookmark, onSelect }: Props) {
         </div>
       </div>
       {onToggleBookmark && (
-        <button onClick={handleToggle} className="text-xl shrink-0">
+        <button
+          onClick={handleToggle}
+          className="text-xl shrink-0 -mt-12 px-3 -mr-3"
+        >
           {menu.bookmark ? (
-            <BookmarkCheck strokeWidth={2.5} color="#ff853eff" />
+            <BookmarkCheck size={28} strokeWidth={2.5} color="#ff853eff" />
           ) : (
-            <Bookmark strokeWidth={2} strokeOpacity={0.25} />
+            <Bookmark size={28} strokeWidth={2.25} strokeOpacity={0.25} />
           )}
         </button>
       )}

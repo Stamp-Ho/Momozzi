@@ -3,7 +3,12 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import type { MenuFilter, Menu, Restaurant } from "@/types/db";
+import type {
+  MenuFilter,
+  Menu,
+  Restaurant,
+  RestaurantFilter,
+} from "@/types/db";
 import { MenuRecommendTab } from "./MenuRecommendTab";
 import { BookmarkTab } from "./BookmarkTab";
 import { ManageTab } from "./ManageTab";
@@ -14,7 +19,7 @@ import { HouseHeart, Utensils, Star, Settings } from "lucide-react";
 
 type TabKey = "recommend" | "bookmark" | "manage";
 
-const defaultFilter: MenuFilter = {
+const defaultMenuFilter: MenuFilter = {
   cuisine_style: null,
   main_ingredient: null,
   meal_type: null,
@@ -22,10 +27,19 @@ const defaultFilter: MenuFilter = {
   priceMax: null,
 };
 
+const defaultRestaurantFilter = {
+  address: "",
+  rating: 0,
+  onlyBookmarked: false,
+};
 export default function RestaurantsPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabKey>("recommend");
-  const [filter, setFilter] = useState<MenuFilter>(defaultFilter);
+  const [menuFilter, setMenuFilter] = useState<MenuFilter>(defaultMenuFilter);
+  const [restaurantFilter, setRestaurantFilter] = useState<RestaurantFilter>(
+    defaultRestaurantFilter
+  );
+  const [edited, setEdited] = useState<boolean>(false);
 
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
   const [selectedRestaurant, setSelectedRestaurant] =
@@ -56,6 +70,17 @@ export default function RestaurantsPage() {
   if (authed === null) {
     return null; // 체크 중엔 아무것도 안 보여줌
   }
+
+  const handleCloseMenuDetail = () => {
+    edited && setMenuFilter({ ...menuFilter });
+    setSelectedMenu(null);
+    setEdited(false);
+  };
+  const handleCloseRestaurantDetail = () => {
+    edited && setRestaurantFilter({ ...restaurantFilter });
+    setSelectedRestaurant(null);
+    setEdited(false);
+  };
   return (
     <>
       <main className="p-4 max-w-3xl mx-auto space-y-4 bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] min-h-screen">
@@ -65,15 +90,17 @@ export default function RestaurantsPage() {
         <div className="h-[90vh]">
           {activeTab === "recommend" && (
             <MenuRecommendTab
-              filter={filter}
-              onChangeFilter={setFilter}
+              menuFilter={menuFilter}
+              onChangeMenuFilter={setMenuFilter}
               onSelectMenu={handleSelectMenu}
             />
           )}
           {activeTab === "bookmark" && (
             <BookmarkTab
-              filter={filter}
-              onChangeFilter={setFilter}
+              menuFilter={menuFilter}
+              onChangeMenuFilter={setMenuFilter}
+              restaurantFilter={restaurantFilter}
+              onChangeRestaurantFilter={setRestaurantFilter}
               onSelectMenu={handleSelectMenu}
               onSelectRestaurant={handleSelectRestaurant}
             />
@@ -82,6 +109,8 @@ export default function RestaurantsPage() {
             <ManageTab
               onSelectMenu={handleSelectMenu}
               onSelectRestaurant={handleSelectRestaurant}
+              edited={edited}
+              setEdited={setEdited}
             />
           )}
         </div>
@@ -91,15 +120,17 @@ export default function RestaurantsPage() {
       {selectedMenu && (
         <MenuDetailPanel
           menu={selectedMenu}
-          onClose={() => setSelectedMenu(null)}
+          onClose={handleCloseMenuDetail}
           onSelectRestaurant={handleSelectRestaurant}
+          setEdited={setEdited}
         />
       )}
       {selectedRestaurant && (
         <RestaurantDetailPanel
           restaurant={selectedRestaurant}
-          onClose={() => setSelectedRestaurant(null)}
+          onClose={handleCloseRestaurantDetail}
           onSelectMenu={handleSelectMenu}
+          setEdited={setEdited}
         />
       )}
       {/* 탭 바 */}

@@ -25,11 +25,15 @@ type NewRelationRow = {
 type ManageTabProps = {
   onSelectMenu?: (menu: Menu) => void;
   onSelectRestaurant?: (restaurant: Restaurant) => void;
+  edited: boolean;
+  setEdited: (next: boolean) => void;
 };
 
 export function ManageTab({
   onSelectMenu,
   onSelectRestaurant,
+  edited,
+  setEdited,
 }: ManageTabProps) {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [menus, setMenus] = useState<Menu[]>([]);
@@ -84,7 +88,8 @@ export function ManageTab({
 
   useEffect(() => {
     void loadInitial();
-  }, []);
+    setEdited(false);
+  }, [edited]);
 
   // 선택한 식당의 관계 프리뷰 (간단히 텍스트만)
   useEffect(() => {

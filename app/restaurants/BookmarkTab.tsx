@@ -25,23 +25,21 @@ const PRICE_MAX = 50000;
 const PRICE_STEP = 2000;
 
 type Props = {
-  filter: MenuFilter;
-  onChangeFilter: (next: MenuFilter) => void;
+  menuFilter: MenuFilter;
+  onChangeMenuFilter: (next: MenuFilter) => void;
+  restaurantFilter: RestaurantFilter;
+  onChangeRestaurantFilter: (next: RestaurantFilter) => void;
   onSelectMenu?: (menu: Menu) => void;
   onSelectRestaurant?: (restaurant: Restaurant) => void;
-};
-
-const defaultRestaurantFilter = {
-  address: "",
-  rating: 0,
-  onlyBookmarked: false,
 };
 
 type ViewMode = "menu" | "restaurant";
 
 export function BookmarkTab({
-  filter,
-  onChangeFilter,
+  menuFilter,
+  onChangeMenuFilter,
+  restaurantFilter,
+  onChangeRestaurantFilter,
   onSelectMenu,
   onSelectRestaurant,
 }: Props) {
@@ -50,22 +48,19 @@ export function BookmarkTab({
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loadingMenus, setLoadingMenus] = useState<boolean>(false);
   const [loadingRestaurants, setLoadingRestaurants] = useState<boolean>(false);
-  const [restaurantFilter, setRestaurantFilter] = useState<RestaurantFilter>(
-    defaultRestaurantFilter
-  );
+
   const [loadingAddress, setLoadingAddress] = useState<boolean>(true);
   const [addressList, setAddressList] = useState<string[]>([]);
 
-  const [test, setTest] = useState(0);
   const handleFilterChange = (patch: Partial<MenuFilter>) => {
-    onChangeFilter({ ...filter, ...patch });
+    onChangeMenuFilter({ ...menuFilter, ...patch });
   };
 
   // 메뉴 북마크 목록
   const loadMenus = async () => {
     setLoadingMenus(true);
     try {
-      const data = await fetchMenusByFilter(filter, {
+      const data = await fetchMenusByFilter(menuFilter, {
         onlyBookmarked: true,
       });
       setMenus(data);
@@ -113,7 +108,7 @@ export function BookmarkTab({
       void loadMenus();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
+  }, [menuFilter]);
 
   useEffect(() => {
     if (viewMode === "restaurant") void loadRestaurants();
@@ -158,12 +153,12 @@ export function BookmarkTab({
 
   // 별점 슬라이더용 핸들러
   const handleRatingStars = (value: number) => {
-    setRestaurantFilter({ ...restaurantFilter, rating: value });
+    onChangeRestaurantFilter({ ...restaurantFilter, rating: value });
   };
 
   // 🔽 가격 슬라이더용 핸들러 추가
   const handlePriceMinChange = (value: number) => {
-    const currentMax = filter.priceMax ?? PRICE_MAX;
+    const currentMax = menuFilter.priceMax ?? PRICE_MAX;
     const nextMin = Math.min(value, currentMax - 5000);
     handleFilterChange({
       priceMin: nextMin,
@@ -171,15 +166,15 @@ export function BookmarkTab({
   };
 
   const handlePriceMaxChange = (value: number) => {
-    const currentMin = filter.priceMin ?? PRICE_MIN;
+    const currentMin = menuFilter.priceMin ?? PRICE_MIN;
     const nextMax = Math.max(value, currentMin + 5000);
     handleFilterChange({
       priceMax: nextMax,
     });
   };
 
-  const effectiveMin = filter.priceMin ?? PRICE_MIN;
-  const effectiveMax = filter.priceMax ?? PRICE_MAX;
+  const effectiveMin = menuFilter.priceMin ?? PRICE_MIN;
+  const effectiveMax = menuFilter.priceMax ?? PRICE_MAX;
   return (
     <section className="space-y-4 text-black">
       {/* 필터 + 모드 전환 */}
@@ -222,7 +217,7 @@ export function BookmarkTab({
                 </label>
                 <select
                   className="rounded px-2 py-2 w-full text-sm text-black border border-gray-400"
-                  value={filter.cuisine_style ?? ""}
+                  value={menuFilter.cuisine_style ?? ""}
                   onChange={(e) =>
                     handleFilterChange({
                       cuisine_style: (e.target.value || null) as any,
@@ -245,7 +240,7 @@ export function BookmarkTab({
                 </label>
                 <select
                   className="rounded px-2 py-2 w-full text-sm text-black border border-gray-400"
-                  value={filter.main_ingredient ?? ""}
+                  value={menuFilter.main_ingredient ?? ""}
                   onChange={(e) =>
                     handleFilterChange({
                       main_ingredient: (e.target.value || null) as any,
@@ -269,7 +264,7 @@ export function BookmarkTab({
                 </label>
                 <select
                   className="rounded px-2 py-2 w-full text-sm text-black border border-gray-400"
-                  value={filter.meal_type ?? ""}
+                  value={menuFilter.meal_type ?? ""}
                   onChange={(e) =>
                     handleFilterChange({
                       meal_type: (e.target.value || null) as any,
@@ -379,7 +374,7 @@ export function BookmarkTab({
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <div className="flex flex-row gap-4.5">
+            <div className="flex flex-row gap-4">
               <div className="w-22.5">
                 <label className="block text-xs text-black mb-1 x-full text-center">
                   지역
@@ -388,7 +383,7 @@ export function BookmarkTab({
                   className="rounded px-2 py-2 w-full text-sm text-black border border-gray-400"
                   value={restaurantFilter.address ?? ""}
                   onChange={(e) =>
-                    setRestaurantFilter({
+                    onChangeRestaurantFilter({
                       ...restaurantFilter,
                       address: e.target.value,
                     })
@@ -409,11 +404,12 @@ export function BookmarkTab({
                   ))}
                 </select>
               </div>
-              <div className="">
-                <label className="block text-xs text-black mb-1 x-full text-center">
+              <div className="flex flex-col">
+                <label className="block text-xs text-black mb-2 x-full text-center">
                   별점
                 </label>
                 <StarRatingSlider
+                  size={28}
                   value={restaurantFilter.rating}
                   onChange={handleRatingStars}
                 />
@@ -422,7 +418,7 @@ export function BookmarkTab({
                 <label className="block text-xs text-black mb-1">북마크</label>
                 <button
                   onClick={() => {
-                    setRestaurantFilter({
+                    onChangeRestaurantFilter({
                       ...restaurantFilter,
                       onlyBookmarked: !restaurantFilter.onlyBookmarked,
                     });

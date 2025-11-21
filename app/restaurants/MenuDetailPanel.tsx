@@ -24,6 +24,7 @@ type Props = {
   menu: Menu;
   onClose: () => void;
   onSelectRestaurant?: (restaurant: Restaurant) => void;
+  setEdited: (next: boolean) => void;
 };
 
 type RelationForm = {
@@ -33,7 +34,12 @@ type RelationForm = {
   note: string;
 };
 
-export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
+export function MenuDetailPanel({
+  menu,
+  onClose,
+  onSelectRestaurant,
+  setEdited,
+}: Props) {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [allRestaurants, setAllRestaurants] = useState<Restaurant[]>([]);
   const [loadingRelations, setLoadingRelations] = useState(false);
@@ -102,6 +108,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
       });
       setCurrentMenu(updated);
       setIsEditing(false);
+      setEdited(true);
     } catch (e) {
       console.error(e);
       // TODO: 토스트나 alert로 알려도 좋음
@@ -202,7 +209,7 @@ export function MenuDetailPanel({ menu, onClose, onSelectRestaurant }: Props) {
             <div className="border rounded-lg p-2 pl-3 space-y-1  bg-white shadow-md shadow-[#00cccc33] border-[#00eeee44] border border-1.5">
               <div className="flex flex-row">
                 <div className="flex flex-col space-y-1">
-                  <div>
+                  <div className="font-semibold">
                     이름:{" "}
                     {isEditing ? (
                       <input
