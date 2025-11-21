@@ -113,15 +113,30 @@ export function RestaurantDetailPanel({
         .filter((x): x is MenuWithRelation => x !== null);
 
       merged.sort((a, b) => {
+        const priceA = a.relation.price;
+        const priceB = b.relation.price;
+
+        const hasPriceA =
+          priceA !== null && priceA !== undefined && priceA !== 0;
+        const hasPriceB =
+          priceB !== null && priceB !== undefined && priceB !== 0;
+
+        // 1) 가격이 없는(menu.relation.price null/undefined/0) 항목을 뒤로 보냄
+        if (hasPriceA !== hasPriceB) {
+          return hasPriceA ? -1 : 1;
+          // A가 가격 있으면 앞으로(-1), 없으면 뒤로(+1)
+        }
+
+        // 2) 가격이 둘 다 있거나 둘 다 없으면 기존 meal_type 기준으로 정렬
         const orderA = MEAL_TYPES.indexOf(a.menu.meal_type as any);
         const orderB = MEAL_TYPES.indexOf(b.menu.meal_type as any);
 
-        // 미정의 타입은 뒤로 보냄
         const safeA = orderA === -1 ? 999 : orderA;
         const safeB = orderB === -1 ? 999 : orderB;
 
         if (safeA !== safeB) return safeA - safeB;
 
+        // 3) 이름 오름차순
         return a.menu.name.localeCompare(b.menu.name);
       });
 
