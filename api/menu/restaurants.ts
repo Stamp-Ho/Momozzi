@@ -25,17 +25,28 @@ export async function fetchAllRestaurants(options?: {
 }
 
 export async function fetchAllSecondAddress(): Promise<string[]> {
-  let query = supabase.from("restaurant").select("address");
+  const { data, error } = await supabase
+    .from("restaurant")
+    .select("address")
+    .order("address", { ascending: true });
 
-  const { data, error } = await query.order("address", { ascending: true });
   if (error) {
     console.error("fetchAllSecondAddress error:", error);
     throw error;
   }
-  const secondAddress: string[] = data.map(
-    (d) => d.address?.split(" ").length > 2 && d.address.split(" ")[1]
-  );
-  return secondAddress;
+
+  const unique = new Set<string>();
+
+  data.forEach((d) => {
+    if (!d.address) return; // null/undefined 방지
+
+    const parts = d.address.split(" ");
+    if (parts.length > 1) {
+      unique.add(parts[1]); // 두 번째 주소만 추가 (중복은 Set이 제거)
+    }
+  });
+
+  return Array.from(unique);
 }
 
 export async function fetchRestaurantsByFilter(
