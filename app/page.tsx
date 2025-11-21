@@ -45,7 +45,7 @@ export default function HomePage() {
   }
 
   return (
-    <main className="p-6 max-w-3xl mx-auto space-y-4 bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] min-h-screen">
+    <main className="p-6 max-w-3xl mx-auto space-y-4 bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] min-h-screen text-black">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-xl font-bold">별이노 4차원 주머니</h1>
         <button
@@ -89,7 +89,7 @@ export default function HomePage() {
             }`}
           >
             <button
-              className={"absolute right-0 -top-1.25 px-1.5 pb-1.5"}
+              className={"absolute right-0 -top-1 px-1.5 pb-1.5"}
               onClick={() => {}}
             >
               <Bookmark
