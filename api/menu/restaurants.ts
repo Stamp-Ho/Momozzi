@@ -90,6 +90,7 @@ export async function createRestaurant(partial: {
     .from("restaurant")
     .insert({
       ...partial,
+      rating: 0,
       bookmark: false,
     })
     .select()
