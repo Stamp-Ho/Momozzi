@@ -83,7 +83,7 @@ export default function RestaurantsPage() {
   };
   return (
     <>
-      <main className="p-4 max-w-3xl mx-auto space-y-4 bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] min-h-screen">
+      <main className="p-4 max-w-md mx-auto space-y-4 bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] min-h-screen">
         <div className="flex flex-row mb-3">
           <h1 className="text-xl text-black font-bold">모모찌~</h1>
           <button
@@ -143,7 +143,7 @@ export default function RestaurantsPage() {
         />
       )}
       {/* 탭 바 */}
-      <div className="fixed bottom-0 left-0 w-full flex gap-2 bg-white shadow-[0_-1px_6px_rgba(0,0,0,0.1)] px-6 py-2">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md flex gap-2 bg-white shadow-[0_-1px_6px_rgba(0,0,0,0.1)] px-6 py-2">
         {[
           { key: "recommend", label: "메뉴 추천", icon: Utensils },
           { key: "bookmark", label: "북마크", icon: Star },

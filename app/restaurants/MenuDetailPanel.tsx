@@ -177,7 +177,7 @@ export function MenuDetailPanel({
     }
   };
   return (
-    <div className="fixed inset-0 bg-black/30 flex justify-end z-50 text-black">
+    <div className="fixed inset-0 bg-black/30 flex justify-end z-50 text-black  pr-0 sm:pr-60">
       <div className="w-full max-w-md h-full bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] shadow-xl flex flex-col">
         {/* 헤더 */}
         <div className="px-4 py-3 border-b-2 border-[#707070] flex justify-between items-center">
@@ -471,7 +471,7 @@ export function MenuDetailPanel({
             </div>
           </div>
         </div>
-        <div className="fixed bottom-0 left-0 w-full flex gap-2 px-12 py-3">
+        <div className="fixed bottom-0 right-0 w-full flex gap-2 px-12 py-3 sm:w-2xl sm:pr-75">
           <button
             onClick={onClose}
             className="text-md text-white font-semibold w-full px-4 py-2.5 bg-[#ff853eff]  rounded-xl shadow-lg shadow-[#ff853e53]"

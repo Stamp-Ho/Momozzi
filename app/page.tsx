@@ -45,7 +45,7 @@ export default function HomePage() {
   }
 
   return (
-    <main className="p-6 max-w-3xl mx-auto space-y-4 bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] min-h-screen text-black">
+    <main className="p-6 max-w-md mx-auto space-y-4 bg-gradient-to-b from-[#Bfffff] to-[#FaFFFF] min-h-screen text-black">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-xl font-bold">별이노 4차원 주머니</h1>
         <button
@@ -110,7 +110,7 @@ export default function HomePage() {
           </a>
         ))}
       </div>
-      <div className="fixed bottom-0 left-0 w-full flex gap-2 bg-white shadow-[0_-1px_6px_rgba(0,0,0,0.1)] px-6 py-2">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-md flex gap-2 bg-white shadow-[0_-1px_6px_rgba(0,0,0,0.1)] px-6 py-2">
         <button
           onClick={() => router.replace("/")}
           className={`px-3 py-1 text-sm flex-1 flex flex-col items-center justify-center font-bold text-[#ff80ceff]`}
