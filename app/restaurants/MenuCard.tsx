@@ -2,6 +2,12 @@
 "use client";
 
 import type { Menu } from "@/types/db";
+import {
+  CUISINE_STYLES_DICT,
+  isCuisineStyle,
+  isMainIngredient,
+  MAIN_INGREDIENTS_DICT,
+} from "@/types/enums";
 import { Bookmark, BookmarkCheck } from "lucide-react";
 
 type Props = {
@@ -28,15 +34,22 @@ export function MenuCard({ menu, onToggleBookmark, onSelect }: Props) {
     >
       <div className="space-y-1">
         <div className="font-semibold text-black">{menu.name}</div>
-        <div className="text-xs text-gray-700">
-          {[
-            `${menu.price != null ? menu.price.toLocaleString() : 0}원`,
-            menu.cuisine_style,
-            menu.meal_type,
-            menu.main_ingredient,
-          ]
-            .filter(Boolean)
-            .join(" · ")}
+        <div className="flex flex-row gap-1.5">
+          <div className="text-xs text-gray-700">
+            {[`${menu.price != null ? menu.price.toLocaleString() : 0}원`]
+              .filter(Boolean)
+              .join(" · ")}
+          </div>
+          <div className="text-md -mt-1.25 -mb-2 text-gray-700">
+            {[
+              isCuisineStyle(menu.cuisine_style) &&
+                CUISINE_STYLES_DICT[menu.cuisine_style].emoji,
+              isMainIngredient(menu.main_ingredient) &&
+                MAIN_INGREDIENTS_DICT[menu.main_ingredient].emoji,
+            ]
+              .filter(Boolean)
+              .join(" · ")}
+          </div>
         </div>
       </div>
       {onToggleBookmark && (

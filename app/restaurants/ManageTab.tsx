@@ -538,8 +538,8 @@ export function ManageTab({
       {/* 하단에 전체 리스트 간단 프리뷰 */}
       <div className="flex flex-col gap-3 text-black pt-16">
         <div className="space-y-2 flex-1">
-          <div className="text-xs font-semibold">전체 식당</div>
-          <div className="space-y-2 max-h-64 overflow-auto pb-2">
+          <div className="text-xs font-semibold ml-2">전체 식당</div>
+          <div className="space-y-2 max-h-86 overflow-auto pb-2">
             {restaurants.map((r) => (
               <RestaurantCard
                 key={r.id}
@@ -550,8 +550,8 @@ export function ManageTab({
           </div>
         </div>
         <div className="space-y-2 flex-1">
-          <div className="text-xs font-semibold">전체 메뉴</div>
-          <div className="space-y-2 max-h-64 overflow-auto pb-4">
+          <div className="text-xs font-semibold ml-2">전체 메뉴</div>
+          <div className="space-y-2 max-h-56 overflow-auto pb-18">
             {menus.map((m) => (
               <MenuCard key={m.id} menu={m} onSelect={onSelectMenu} />
             ))}

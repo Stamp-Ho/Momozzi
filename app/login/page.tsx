@@ -30,7 +30,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-slate-100">
+    <main className="min-h-screen flex items-center justify-center bg-slate-100 text-black">
       <div className="bg-white rounded-3xl shadow-md p-6 w-full max-w-xs space-y-4">
         <h1 className="text-xl font-bold text-center">이건 우리만 쓸거야</h1>
 
